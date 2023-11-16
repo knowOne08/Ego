@@ -1,0 +1,50 @@
+.container {
+    background-color: var(--bg-color);
+    overflow-y: hidden;
+}
+.card_poem_title {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 35px;
+    white-space: nowrap;
+    color: rgb(235, 52, 52);
+}
+
+.main_card {
+    margin:  30px auto 15px;
+    @media (min-width: 1200px) {
+        margin-bottom: 90px; /* Set a larger bottom margin for screens wider than 1200px */
+    }
+}
+
+
+.card_poem {
+    font-size: 17px;
+    white-space: nowrap;
+}
+
+.author_link {
+    transition: color 0.3s ease-in-out; /* Set the transition duration and timing function */
+    color:rgb(150, 150, 150);
+    font-size: 22px;
+    white-space: nowrap;
+    font-weight: 550;
+}
+
+.author_link:hover {
+    color: rgba(118, 208, 250, 0.918);
+    text-decoration: underline;
+}
+
+/* @media screen and (max-width: 768px) {
+    .card_poem_title {
+        font-size: 29px;
+    }
+
+    .card_poem {
+        font-size: 15px;
+    }
+
+    .author_link {
+        font-size: 19px;
+    }
+} */

@@ -1,0 +1,48 @@
+.heading .title {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 40px;
+    color: rgb(0, 102, 255);
+}
+
+.heading .quote {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 25px;
+}
+
+.menu  {
+    margin: 20px;
+    padding-top: 10px;
+}
+
+.poem_title {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 40px;
+    transition: color 0.5s ease-in-out; /* Set the transition duration and timing function */
+
+}
+
+.poem_title:hover {
+    color: rgba(255, 73, 73, 0.918);
+}
+
+.poem_author {
+    font-size: 20px;
+}
+
+@media screen and (max-width: 768px) {
+    .heading .title {
+        font-size: 30px;
+    }
+
+    .heading .quote {
+        font-size: 20px;
+    }
+
+    .poem_title {
+        font-size: 30px;
+    }
+
+    .poem_author {
+        font-size: 16px;
+    }
+}
