@@ -30,63 +30,15 @@ const dataabout = {
     title: "About myself",
     aboutme: "Haven't actually done that much things, so not much to say... hi",
 };
-const worktimeline = [{
-        jobtitle: "Designer of week",
-        where: "YAdfi",
-        date: "2020",
-    },
-    {
-        jobtitle: "Designer of week",
-        where: "Jamalya",
-        date: "2019",
-    },
-    {
-        jobtitle: "Designer of week",
-        where: "ALquds",
-        date: "2019",
-    },
-];
 
-const skills = [{
-        name: "Python",
-        value: 90,
-    },
-    {
-        name: "Djano",
-        value: 85,
-    },
-    {
-        name: "Javascript",
-        value: 80,
-    },
-    {
-        name: "React",
-        value: 60,
-    },
-    {
-        name: "Jquery",
-        value: 85,
-    },
-];
+
 const poetryQuotes = [
     '“It was at that age, that poetry came in search of me.” —Pablo Neruda',
     '“Poetry is a way of taking life by the throat.” —Robert Frost',
     '“Poetry is an echo, asking a shadow to dance.” —Carl Sandburg',
     '“Poetry is language at its most distilled and most powerful.” —Rita Dove'
 ]
-const services = [{
-        title: "UI & UX Design",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at nisl euismod urna bibendum sollicitudin.",
-    },
-    {
-        title: "Mobile Apps",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at nisl euismod urna bibendum sollicitudin.",
-    },
-    {
-        title: "Wordpress Design",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at nisl euismod urna bibendum sollicitudin.",
-    },
-];
+
 const poems = [
     {
         title: "Fifth Philospher's Song",
@@ -275,8 +227,6 @@ const contactConfig = {
     YOUR_EMAIL: "yashdarji23082004@gmail.com",
     YOUR_FONE: "+91 97272308XX",
     description: "This is our auto feedback form if you have found any bugs in the site please contact directly on email.",
-    // creat an emailjs.com account 
-    // check out this tutorial https://www.emailjs.com/docs/examples/reactjs/
     YOUR_SERVICE_ID: "service_gsuk1yv",
     YOUR_TEMPLATE_ID: "template_0ulklz5",
     YOUR_USER_ID: "hl_Odl7ESZ1V3Azv9",
@@ -291,9 +241,6 @@ export {
     meta,
     dataabout,
     paintings,
-    worktimeline,
-    skills,
-    services,
     introdata,
     contactConfig,
     socialprofils,
