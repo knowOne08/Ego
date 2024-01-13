@@ -115,6 +115,8 @@
 
 .description {
     position: relative;
+    padding-bottom: 20px;
+    /* padding-right: 10px; */
 }
 
 .artist {

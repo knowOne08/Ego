@@ -16,7 +16,7 @@ const meta = {
 };
 
 const introdata = {
-    title: "I'm Yash Darji",
+    title: "I'm Yash",
     animated: {
         first: "Physics",
         second: "Rockets",
@@ -167,58 +167,58 @@ Thy proud heart's slave and vassal wretch to be.
 const paintings = [{
         img: Image2,
         description: "School of Athens",
-        link: "#",
+        link: "art_gallery/school_of_athens",
         artist: 'Raphael'
     },
     {
         img: Image1,
         description: "American Gothic",
-        link: "#",
+        link: "art_gallery/american_gothic",
         artist: 'Grant Wood'
     },
     {
         img: Image3,
         description: "Nighthawks",
-        link: "#",
+        link: "art_gallery/nighthawks",
         artist: "Edward Hopper"
 
     },
     {
         img: Image4,
         description: "The Death of Socrates",
-        link: "#",
+        link: "art_gallery/death_of_socrates",
         artist: "Jacques-Louis David"
     },
     {
         img: Image5,
         description: "Girl with a Pearl Earring",
-        link: "#",
+        link: "art_gallery/girl_with_a_pearl_earing",
         artist: "Johannes Vermeer"
     },
     {
         img: Image8,
         description: "Echo and Narcissus",
-        link: "#",
+        link: "art_gallery/echo_and_narcissus",
         artist: "John William Waterhouse"
     },
     
     {
         img: Image6,
         description: "The Van Gogh",
-        link: "#",
+        link: "art_gallery/the_van_gogh",
         artist: "John Russell"
     },
     
     {
         img: Image7,
         description: "Starry Nights",
-        link: "#",
+        link: "art_gallery/starry_nights",
         artist: "Van Gogh"
     },
     {
         img: Image9,
         description: "The Persistence of Memory",
-        link: "#",
+        link: "art_gallery/persistence_of_memory",
         artist: "Salvador Dalí"
     },
 ];

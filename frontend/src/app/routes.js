@@ -10,6 +10,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { ArtGallery } from "../pages/artGallery";
 import { PoetryCollection } from "../pages/poetry";
 import { PoetryCard } from "../pages/poetryCard";
+import { ArtCard } from "../pages/artCard";
 
 const AnimatedRoutes = withRouter(({ location }) => (
   <TransitionGroup>
@@ -28,6 +29,7 @@ const AnimatedRoutes = withRouter(({ location }) => (
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/art_gallery" element={<ArtGallery />}/>
+        <Route path="/art_gallery/*" element={<ArtCard />}/>
         <Route path="/poetry" element={<PoetryCollection />} />
         <Route path="/poetry/*" element={<PoetryCard/>} />
         <Route path="*" element={<Home />} />

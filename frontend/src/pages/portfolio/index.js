@@ -32,7 +32,7 @@ export const Portfolio = () => {
             );
           })}
         </div> */}
-        <div>Soon</div>
+        <div>Revamping. Enhancements underway</div>
       </Container>
     </HelmetProvider>
   );

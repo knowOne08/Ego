@@ -1,3 +1,5 @@
 node_modules
 # eslint cache
 .eslintcache
+
+src/removed_content.js
