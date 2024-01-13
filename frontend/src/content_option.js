@@ -27,8 +27,14 @@ const introdata = {
 };
 
 const dataabout = {
-    title: "About myself",
-    aboutme: "Haven't actually done that much things, so not much to say... hi",
+    title: "Seeker",
+    aboutme: "Never seemed to articulate myself, So rather I would leave you with this quatrain,",
+    quatrain:`
+Within the quiet echo of my days, a novice on life's stage,
+Whispers weave a tale, a gentle prelude to engage.
+Haven't scripted grand narratives or soared high,
+Yet, in simplicity's embrace, I offer a humble 'hi.'
+`
 };
 
 

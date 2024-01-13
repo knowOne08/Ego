@@ -86,6 +86,24 @@
     }
 }
 
+
+.about {
+    white-space: pre-line;
+    font-family: 'Times New Roman', Times, serif; /* Replace 'Your Chosen Font' with the desired font */
+    font-size: 18px; /* Adjust the font size as needed */
+    line-height: 1.6; /* Adjust the line height for better readability */
+    max-width: 800px; /* Adjust the maximum width for responsiveness */
+    margin: 0 auto; /* Center the content horizontally */
+}
+
+/* Add media query for responsiveness on smaller screens */
+@media only screen and (max-width: 600px) {
+    .about {
+        font-size: 15px; /* Adjust font size for smaller screens */
+        max-width: 100%; /* Allow the content to take the full width on smaller screens */
+    }
+}
+
 @keyframes fadeInUp {
     0% {
         opacity: 0;
