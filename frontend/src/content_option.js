@@ -238,6 +238,139 @@ const contactConfig = {
     YOUR_USER_ID: "hl_Odl7ESZ1V3Azv9",
 };
 
+const dataportfolio = [
+    // Main Projects Section
+    {
+        title: "SNSv1",
+        description: "First model rocket flight computer using ESP8266 & BMP280 with a pyro channel. Fully in-house etched PCB, designed for Ananta. Firmware written in C++.",
+        link: "https://x.com/know_one08/status/1755916191472767315",
+        category: "Aerospace",
+        technologies: ["ESP8266", "BMP280", "C++", "PCB Design"],
+        isMainProject: true
+    },
+    {
+        title: "SNSv3",
+        description: "Upgraded version of SNSv1, commercially manufactured for improved reliability. Enhanced firmware and performance.",
+        link: "#",
+        category: "Aerospace",
+        technologies: ["ESP32", "Commercial PCB", "Enhanced Firmware"],
+        isMainProject: true
+    },
+    {
+        title: "Technofest Series",
+        description: "Suite of avionics for Technofest Rocket competition",
+        link: "https://x.com/vgecrocketry/status/1787847367191892037",
+        category: "Aerospace",
+        technologies: ["ESP32", "ESP-NOW", "RF Communication"],
+        subProjects: [
+            { name: "Serene", description: "Primary FC (ESP32) with 2 IMUs & pressure sensor" },
+            { name: "Prometheus", description: "Ignitor card housing pyro channels" },
+            { name: "ComCop", description: "Communication computer using ESP-NOW and RF (8 km range)" }
+        ],
+        isMainProject: true
+    },
+    {
+        title: "Atom",
+        description: "General-purpose flight computer for medium/high-altitude experimental rockets. Doubles as a dev board with IMU & pressure sensor. Funded by SSIP (₹54,000).",
+        link: "https://x.com/know_one08/status/1875271426426745305",
+        category: "Aerospace",
+        technologies: ["Flight Computer", "IMU", "Pressure Sensor"],
+        funding: "SSIP (₹54,000)",
+        isMainProject: true
+    },
+    {
+        title: "C6",
+        description: "Advanced flight computer with redundant sensors (2 IMUs, 2 pressure sensors, 4 pyro channels). COTS-grade design. Funded by BagelFund ($490).",
+        link: "https://github.com/knowOne08/C6",
+        category: "Aerospace",
+        technologies: ["Redundant Sensors", "COTS Design", "Pyro Channels"],
+        funding: "BagelFund ($490)",
+        isMainProject: true
+    },
+    {
+        title: "zer0",
+        description: "Smallest FC (15x15 mm) with 2 pyro, 2 PWM, IMU, 2MB flash. Compact and efficient.",
+        link: "https://github.com/knowOne08/zer0",
+        category: "Aerospace",
+        technologies: ["Miniaturization", "Flash Memory", "PWM"],
+        isMainProject: true
+    },
+    {
+        title: "Pavisys",
+        description: "Custom PCB suite for parachute testing on UAVs – including 2 TX (module/component-based) and 1 RX. Logged accel, gyro, pressure & load data at 40Hz designed for an aerospace R&D company.",
+        link: "https://github.com/knowOne08/pavisys",
+        category: "Aerospace",
+        technologies: ["PCB Design", "Data Logging", "UAV Systems"],
+        isMainProject: true
+    },
+    {
+        title: "Avon",
+        description: "Developed a temperature-controlled oven for preprocessing sugar-based propellants for solid rocket motors.",
+        link: "#",
+        category: "Aerospace",
+        technologies: ["Temperature Control", "Propellant Processing"],
+        isMainProject: true
+    },
+    // Other Projects Section
+    {
+        title: "attendee",
+        description: "RFID-based attendance system with real-time web interface, offline capability, and ESP8266 firmware. Complete hardware, firmware, web, and mobile app stack.",
+        link: "https://github.com/knowOne08/attendee",
+        category: "Full Stack",
+        technologies: ["RFID", "ESP8266", "Web Interface", "Mobile App"],
+        isMainProject: false
+    },
+    {
+        title: "openlog",
+        description: "Open-source experimental rocketry data platform for the VGEC Rocketry Team. Enables data search, retrieval, and publishing.",
+        link: "https://github.com/knowOne08/openlog",
+        category: "Data Platform",
+        technologies: ["Data Management", "Search", "Publishing"],
+        isMainProject: false
+    },
+    {
+        title: "smartagent.one",
+        description: "Worked on WhatsApp bot for Smartagent using Baileys API for catalogue sharing, stock updates, and GenAI features.",
+        link: "https://smartagent.one/",
+        category: "AI/Bot",
+        technologies: ["WhatsApp Bot", "Baileys API", "GenAI"],
+        isMainProject: false
+    },
+    {
+        title: "Donna",
+        description: "PoC Agentic RAG Pipeline for the Department of Justice (Smart India Hackathon project).",
+        link: "https://github.com/knowOne08/SIH-2024",
+        category: "AI/RAG",
+        technologies: ["RAG Pipeline", "Legal Tech", "AI Agents"],
+        isMainProject: false
+    },
+    {
+        title: "WrapLearn",
+        description: "Interactive learning tool for summarizing legal and research documents using semantic search and vector embeddings.",
+        link: "https://devfolio.co/projects/warplearn-a56b",
+        category: "AI/Education",
+        technologies: ["Semantic Search", "Vector Embeddings", "Legal Documents"],
+        isMainProject: false
+    },
+    {
+        title: "HackVGEC",
+        description: "AR-based campus navigation app for improved student orientation.",
+        link: "https://devfolio.co/projects/indoor-navigation-using-ar-417b",
+        category: "AR/Mobile",
+        technologies: ["Augmented Reality", "Navigation", "Mobile App"],
+        isMainProject: false
+    },
+    {
+        title: "Swarm Drone System",
+        description: "Developing autonomous drones with custom electronics, 3D printing, and laser-cut components. (ongoing)",
+        link: "#",
+        category: "Aerospace",
+        technologies: ["Autonomous Systems", "3D Printing", "Custom Electronics"],
+        status: "ongoing",
+        isMainProject: false
+    }
+];
+
 const socialprofils = {
     github: "https://github.com/knowOne08",
     linkedin: "https://linkedin.com/in/yash-darji-6249a3255/",
@@ -246,6 +379,7 @@ const socialprofils = {
 export {
     meta,
     dataabout,
+    dataportfolio,
     paintings,
     introdata,
     contactConfig,

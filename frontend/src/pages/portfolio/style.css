@@ -1,3 +1,4 @@
+/* Legacy gallery styles - keeping for backward compatibility */
 .po_items_ho {
     column-width: 15em;
     -moz-column-width: 15em;
@@ -68,8 +69,6 @@
 }
 
 .po_item .content a {
-    /* background: var(--bg-color);
-    border: solid 1px var(--text-color); */
     padding: 4px 8px;
     text-align: center;
     font-size: 1rem;
@@ -77,4 +76,361 @@
 
 .po_item .content a:hover {
     text-decoration: none;
+}
+
+/* New Project Card Styles */
+.section-title {
+    color: var(--text-color);
+    font-family: 'Marcellus', serif;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.section-title:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: var(--text-color-3);
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.project-card {
+    background: var(--primary-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+/* Remove direct hover on project-card since it's now handled by project-card-link */
+.project-card:not(.project-card-link .project-card):hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border-color: var(--text-color-3);
+}
+
+.project-card:hover::before {
+    left: 100%;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.project-title {
+    color: var(--text-color);
+    font-family: 'Marcellus', serif;
+    font-size: 1.25rem;
+    margin: 0;
+    flex: 1;
+    min-width: 200px;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.project-link {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.project-link:focus,
+.tech-tag:focus {
+    outline: 2px solid var(--text-color-3);
+    outline-offset: 2px;
+}
+
+.project-link:hover {
+    color: var(--text-color-3);
+    text-decoration: none;
+}
+
+.project-category {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge {
+    background: var(--text-color-3);
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.project-content {
+    line-height: 1.6;
+}
+
+.project-description {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.project-description a {
+    color: var(--text-color-3);
+    text-decoration: underline;
+    transition: opacity 0.3s ease;
+}
+
+.project-description a:hover {
+    opacity: 0.8;
+    color: var(--text-color-3);
+}
+
+.sub-projects {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: var(--overlay-color);
+    border-radius: 6px;
+    border-left: 3px solid var(--text-color-3);
+}
+
+.sub-projects ul {
+    margin: 0;
+    padding-left: 1rem;
+}
+
+.sub-projects li {
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.sub-projects strong {
+    color: var(--text-color-3);
+}
+
+.funding-info {
+    margin: 1rem 0;
+}
+
+.funding-badge {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.tech-tag {
+    background: var(--overlay-color);
+    color: var(--text-color);
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    border: 1px solid var(--secondary-color);
+    transition: all 0.3s ease;
+}
+
+.tech-tag:hover {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+/* Enhanced animations and effects */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.project-card {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.project-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.project-card:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.project-card:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+/* Clickable project card styles */
+.project-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.project-card-link:hover,
+.project-card-link:focus {
+    text-decoration: none;
+    color: inherit;
+}
+
+.project-card-link:hover .project-card {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border-color: var(--text-color-3);
+}
+
+.project-card-link:focus {
+    outline: 2px solid var(--text-color-3);
+    outline-offset: 4px;
+    border-radius: 8px;
+}
+
+/* Ensure hover effects work properly with clickable cards */
+.project-card-link .project-card:hover {
+    transform: none; /* Prevent double transform */
+}
+
+/* Add cursor pointer for clickable cards */
+.project-card-link {
+    cursor: pointer;
+}
+
+/* Non-clickable cards should have default cursor */
+.project-card:not(.project-card-link .project-card) {
+    cursor: default;
+}
+
+/* Update existing hover effect to work with new structure */
+.project-card-link:hover .project-card::before {
+    left: 100%;
+}
+
+/* Visual indicators for clickable cards */
+.project-card-link .project-card {
+    position: relative;
+}
+
+.project-card-link .project-card::after {
+    content: '↗';
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.2rem;
+    color: var(--text-color-3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.project-card-link:hover .project-card::after {
+    opacity: 0.7;
+}
+
+/* Ensure the external link icon doesn't interfere with content */
+.project-card-link .project-header {
+    padding-right: 2rem;
+}
+
+/* Add subtle background change on hover for better feedback */
+.project-card-link:hover .project-card {
+    background: var(--overlay-color);
+}
+
+/* Improve accessibility with better focus states */
+.project-card-link:focus .project-card {
+    border-color: var(--text-color-3);
+    box-shadow: 0 0 0 2px var(--text-color-3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .project-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .project-category {
+        align-self: flex-start;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-card {
+        padding: 1rem;
+    }
+    
+    .technologies {
+        gap: 0.3rem;
+    }
+    
+    .tech-tag {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+    }
+    
+    .About-header {
+        padding: 0 15px;
+    }
+    
+    .section-title {
+        margin-bottom: 1.5rem;
+    }
+    
+    .funding-badge {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.8rem;
+    }
 }
