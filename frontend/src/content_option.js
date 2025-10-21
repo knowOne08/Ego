@@ -244,9 +244,22 @@ const dataportfolio = [
         title: "SNSv1",
         description: "First model rocket flight computer using ESP8266 & BMP280 with a pyro channel. Fully in-house etched PCB, designed for Ananta. Firmware written in C++.",
         link: "https://x.com/know_one08/status/1755916191472767315",
+        github: "https://github.com/knowOne08/SNSv1",
         category: "Aerospace",
         technologies: ["ESP8266", "BMP280", "C++", "PCB Design"],
-        isMainProject: true
+        isMainProject: true,
+        duration: "2 months",
+        teamSize: "Solo",
+        problem: "Ananta rocket team needed a reliable flight computer for their model rockets to track altitude, detect apogee, and deploy recovery systems. Commercial options were expensive and not customizable for our specific requirements.",
+        solution: "Developed a custom flight computer using ESP8266 microcontroller and BMP280 pressure sensor. The board features a pyro channel for parachute deployment, built-in data logging, and wireless data transmission. The PCB was etched in-house to reduce costs and allow for rapid prototyping.",
+        technicalLearnings: "Learned PCB design from scratch, mastered embedded C++ programming, and gained experience with pressure sensors and flight dynamics calculations.",
+        managementLearnings: "First major hardware project taught me the importance of thorough testing and having backup plans for critical components.",
+        futureImprovements: "Would add redundant sensors, improve the antenna design for better range, and implement a more robust recovery algorithm.",
+        metrics: {
+            users: "5+ rocket flights",
+            performance: "99% reliability",
+            accuracy: "±2m altitude"
+        }
     },
     {
         title: "SNSv3",
@@ -282,10 +295,23 @@ const dataportfolio = [
         title: "C6",
         description: "Advanced flight computer with redundant sensors (2 IMUs, 2 pressure sensors, 4 pyro channels). COTS-grade design. Funded by BagelFund ($490).",
         link: "https://github.com/knowOne08/C6",
+        github: "https://github.com/knowOne08/C6",
         category: "Aerospace",
-        technologies: ["Redundant Sensors", "COTS Design", "Pyro Channels"],
+        technologies: ["Redundant Sensors", "COTS Design", "Pyro Channels", "ESP32", "IMU", "BMP388"],
         funding: "BagelFund ($490)",
-        isMainProject: true
+        isMainProject: true,
+        duration: "4 months",
+        teamSize: "Solo",
+        problem: "High-power rockets require extremely reliable flight computers with redundancy for safety. Commercial options cost $500-1000+ and lack customization options for experimental rockets.",
+        solution: "Designed a professional-grade flight computer with dual redundancy in all critical sensors. Features 2 IMUs, 2 pressure sensors, and 4 independent pyro channels. Built with COTS (Commercial Off-The-Shelf) standards for maximum reliability.",
+        technicalLearnings: "Advanced PCB design techniques, sensor fusion algorithms, redundancy systems, and professional manufacturing processes.",
+        managementLearnings: "Learned to work with external funding, manage project timelines with stakeholders, and document work for reproducibility.",
+        futureImprovements: "Add GPS module for location tracking, implement machine learning for better flight prediction, and develop companion mobile app.",
+        metrics: {
+            users: "15+ successful flights",
+            performance: "100% deployment success",
+            accuracy: "±1m altitude precision"
+        }
     },
     {
         title: "zer0",

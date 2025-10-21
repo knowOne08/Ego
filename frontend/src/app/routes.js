@@ -11,6 +11,7 @@ import { ArtGallery } from "../pages/artGallery";
 import { PoetryCollection } from "../pages/poetry";
 import { PoetryCard } from "../pages/poetryCard";
 import { ArtCard } from "../pages/artCard";
+import { ProjectDetail } from "../pages/projectDetail";
 
 const AnimatedRoutes = withRouter(({ location }) => (
   <TransitionGroup>
@@ -27,6 +28,7 @@ const AnimatedRoutes = withRouter(({ location }) => (
         <Route exact path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/project/:projectId" element={<ProjectDetail />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/art_gallery" element={<ArtGallery />}/>
         <Route path="/art_gallery/*" element={<ArtCard />}/>

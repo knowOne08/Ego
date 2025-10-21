@@ -2,6 +2,7 @@ import React from "react";
 import "./style.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Container, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { dataportfolio, meta } from "../../content_option";
 
 export const Portfolio = () => {
@@ -49,23 +50,18 @@ export const Portfolio = () => {
       </div>
     );
 
-    // If project has a valid link, make entire card clickable
-    if (project.link && project.link !== "#") {
-      return (
-        <a 
-          key={index}
-          href={project.link} 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="project-card-link"
-        >
-          <CardContent />
-        </a>
-      );
-    }
-
-    // If no valid link, return non-clickable card
-    return <CardContent key={index} />;
+    // Make all cards clickable to detail page
+    const projectSlug = project.title.toLowerCase().replace(/\s+/g, '-');
+    
+    return (
+      <Link 
+        key={index}
+        to={`/project/${projectSlug}`}
+        className="project-card-link"
+      >
+        <CardContent />
+      </Link>
+    );
   };
 
   return (
@@ -73,13 +69,13 @@ export const Portfolio = () => {
       <Container className="About-header">
         <Helmet>
           <meta charSet="utf-8" />
-          <title> Projects | {meta.title} </title>
+          <title> Works | {meta.title} </title>
           <meta name="description" content={meta.description} />
         </Helmet>
         
         <Row className="mb-5 mt-3 pt-md-3">
           <Col lg="8">
-            <h1 className="display-4 mb-4"> Projects </h1>
+            <h1 className="display-4 mb-4"> Works </h1>
             <hr className="t_border my-4 ml-0 text-left" />
           </Col>
         </Row>
@@ -87,7 +83,7 @@ export const Portfolio = () => {
         {/* Main Projects Section */}
         <Row className="mb-5">
           <Col lg="12">
-            <h2 className="section-title mb-4">Featured Projects</h2>
+            <h2 className="section-title mb-4">Builds</h2>
             <div className="projects-grid">
               {mainProjects.map((project, index) => (
                 <ProjectCard key={index} project={project} index={index} />
