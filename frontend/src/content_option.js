@@ -259,6 +259,13 @@ const dataportfolio = [
             users: "5+ rocket flights",
             performance: "99% reliability",
             accuracy: "±2m altitude"
+        },
+        scene3D: {
+            type: "rocket",
+            primaryColor: "#e74c3c",
+            secondaryColor: "#34495e",
+            hasExhaust: true,
+            showPCB: true
         }
     },
     {
@@ -289,7 +296,14 @@ const dataportfolio = [
         category: "Aerospace",
         technologies: ["Flight Computer", "IMU", "Pressure Sensor"],
         funding: "SSIP (₹54,000)",
-        isMainProject: true
+        isMainProject: true,
+        scene3D: {
+            type: "satellite",
+            primaryColor: "#4a90e2",
+            secondaryColor: "#001a4d",
+            hasSolarPanels: true,
+            showAntenna: true
+        }
     },
     {
         title: "C6",
@@ -311,6 +325,13 @@ const dataportfolio = [
             users: "15+ successful flights",
             performance: "100% deployment success",
             accuracy: "±1m altitude precision"
+        },
+        scene3D: {
+            type: "pcb",
+            primaryColor: "#006600",
+            secondaryColor: "#333333",
+            hasComponents: true,
+            showSensors: true
         }
     },
     {

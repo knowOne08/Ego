@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { dataportfolio } from "../../content_option";
+import ProjectScene3D from "../../components/3d/ProjectScene3D";
 import "./style.css";
 
 export const ProjectDetail = () => {
@@ -72,6 +73,13 @@ export const ProjectDetail = () => {
             <div className="hero-gradient"></div>
             <div className="hero-noise"></div>
           </div>
+          
+          {/* 3D Scene Background */}
+          <ProjectScene3D 
+            project={project} 
+            className="hero-3d-scene"
+            intensity={0.8}
+          />
           
           <div className="hero-content">
             <div className="hero-meta">

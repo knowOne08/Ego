@@ -139,6 +139,9 @@
     text-align: center;
     max-width: 800px;
     padding: 0 2rem;
+    backdrop-filter: blur(2px);
+    border-radius: 20px;
+    background: rgba(var(--primary-color-rgb), 0.1);
 }
 
 .hero-meta {
@@ -1349,101 +1352,91 @@
     100% { transform: rotate(360deg); }
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .vision-layout,
-    .impact-layout {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-    }
-    
-    .hero-visual {
+/* 3D Scene Integration */
+.hero-3d-scene {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    opacity: 0;
+    animation: sceneReveal 2s ease 1s forwards;
+}
+
+@keyframes sceneReveal {
+    0% { opacity: 0; transform: scale(1.1); }
+    100% { opacity: 0.8; transform: scale(1); }
+}
+
+.hero-3d-scene .scene-overlay-gradient {
+    z-index: 5;
+}
+
+.hero-3d-scene .scene-overlay-left {
+    background: linear-gradient(to right, 
+        rgba(var(--primary-color-rgb), 0.8) 0%, 
+        rgba(var(--primary-color-rgb), 0.4) 50%, 
+        transparent 100%);
+}
+
+.hero-3d-scene .scene-overlay-right {
+    background: linear-gradient(to left, 
+        rgba(var(--primary-color-rgb), 0.6) 0%, 
+        rgba(var(--primary-color-rgb), 0.3) 50%, 
+        transparent 100%);
+}
+
+.hero-3d-scene .scene-overlay-bottom {
+    background: linear-gradient(to top, 
+        rgba(var(--primary-color-rgb), 0.9) 0%, 
+        rgba(var(--primary-color-rgb), 0.5) 50%, 
+        transparent 100%);
+}
+
+/* Responsive 3D scene adjustments */
+@media (max-width: 768px) {
+    .hero-3d-scene {
         display: none;
     }
     
-    .constellation-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 2rem;
-    }
-    
-    .essence-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 2rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .project-nav {
-        top: 70px;
-        left: 1rem;
-        right: 1rem;
-        padding: 0.8rem 1.5rem;
-    }
-    
-    .hero-cinematic {
-        height: 80vh;
-    }
-    
     .hero-content {
-        padding: 0 1rem;
-    }
-    
-    .hero-actions {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .action-btn {
-        width: 100%;
-        max-width: 300px;
-        justify-content: center;
-    }
-    
-    .components-artistic {
-        grid-template-columns: 1fr;
-    }
-    
-    .reflections-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .related-artistic {
-        grid-template-columns: 1fr;
-    }
-    
-    .reflection-quote {
-        font-size: 1.1rem;
-        padding: 0 1rem;
+        backdrop-filter: none;
+        background: transparent;
     }
 }
 
 @media (max-width: 480px) {
+    .hero-3d-scene {
+        display: none;
+    }
+}
+
+/* Performance optimizations for 3D scene */
+.hero-3d-scene * {
+    will-change: transform, opacity;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .hero-3d-scene {
+        animation: none;
+        opacity: 0.3;
+    }
+    
+    @keyframes sceneReveal {
+        0%, 100% { opacity: 0.3; transform: scale(1); }
+    }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+    .hero-3d-scene {
+        opacity: 0.2;
+    }
+    
     .hero-content {
-        padding: 0 0.5rem;
-    }
-    
-    .essence-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .essence-item {
-        padding: 1rem 0;
-    }
-    
-    .constellation-grid {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    }
-    
-    .tech-orb {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .component-artistic {
-        padding: 1.5rem;
-    }
-    
-    .card-content {
-        padding: 1.5rem;
+        background: rgba(var(--primary-color-rgb), 0.8);
+        border: 2px solid var(--text-color);
     }
 }
