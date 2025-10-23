@@ -397,6 +397,69 @@ const dataportfolio = [
     }
 ];
 
+const blogs = [
+    {
+        id: 1,
+        title: "The Philosophy of Code: Between Logic and Art",
+        excerpt: "Exploring the delicate balance between mathematical precision and creative expression in software development...",
+        date: "2025-01-15",
+        readTime: "8 min read",
+        tags: ["Philosophy", "Programming", "Art", "Technology"],
+        featured: true,
+        image: Image1
+    },
+    {
+        id: 2,
+        title: "The Cosmos Within: A Journey Through Space and Self",
+        excerpt: "Reflections on how the vastness of space mirrors the infinite complexity of human consciousness...",
+        date: "2025-01-10",
+        readTime: "6 min read",
+        tags: ["Philosophy", "Space", "Consciousness", "Science"],
+        featured: true,
+        image: Image7
+    },
+    {
+        id: 3,
+        title: "The Art of Digital Minimalism",
+        excerpt: "In a world of infinite digital noise, finding peace through intentional technology use...",
+        date: "2025-01-05",
+        readTime: "5 min read",
+        tags: ["Minimalism", "Technology", "Productivity", "Digital Wellness"],
+        featured: false,
+        image: Image5
+    },
+    {
+        id: 4,
+        title: "Rockets, Dreams, and the Human Spirit",
+        excerpt: "Why humanity's journey to the stars represents our greatest expression of hope and curiosity...",
+        date: "2024-12-28",
+        readTime: "7 min read",
+        tags: ["Space", "Engineering", "Dreams", "Innovation"],
+        featured: false,
+        image: Image3
+    },
+    {
+        id: 5,
+        title: "The Ephemeral Nature of Digital Art",
+        excerpt: "Exploring how digital art challenges our notions of permanence and authenticity in the modern age...",
+        date: "2024-12-20",
+        readTime: "6 min read",
+        tags: ["Digital Art", "Philosophy", "Technology", "Preservation"],
+        featured: false,
+        image: Image9
+    },
+    {
+        id: 6,
+        title: "How to NOT Build a Two-Stage Model Rocket",
+        excerpt: "When engineering meets ambition... and occasionally, the ground. A detailed journey through our first two-stage rocket attempt, complete with failures, learnings, and explosions.",
+        date: "2024-11-15",
+        readTime: "12 min read",
+        tags: ["Rocketry", "Engineering", "VGEC", "Aerospace", "Failure"],
+        featured: true,
+        image: Image6
+    }
+];
+
 const socialprofils = {
     github: "https://github.com/knowOne08",
     linkedin: "https://linkedin.com/in/yash-darji-6249a3255/",
@@ -413,4 +476,5 @@ export {
     logotext,
     poems,
     poetryQuotes,
+    blogs,
 };

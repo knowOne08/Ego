@@ -1,5 +1,5 @@
 section {
-    flex: 1 0 auto;
+    flex: 1 0 auto !important;
     position: relative;
     width: 100%;
     -webkit-transition: all .5s ease-in;
@@ -101,16 +101,18 @@ section {
 }
 
 .ac_btn {
-    padding: 4px 19px;
+    padding: 4px 19px !important;
     color: var(--secondary-color);
-    position: relative;
-    border: var(--secondary-color) 2px solid;
+    position: relative !important;
+    display: inline-block !important;
+
+    border: var(--secondary-color) 2px solid !important;
     overflow: hidden;
     transition: all 0.6s cubic-bezier(0.55, 0, 0.1, 1);
     cursor: pointer;
-    border-radius: 0;
+    border-radius: 0 !important;
     margin-right: 20px;
-}
+    }
 
 .ac_btn a {
     text-decoration: none;
@@ -197,7 +199,7 @@ section {
     z-index: 9999999999;
     display: flex;
     align-items: center;
-    flex-direction: column;
+    flex-direction: column !important;
     justify-content: center;
 }
 
@@ -241,4 +243,39 @@ section {
 
 .intro_sec .h_bg-image {
     filter: saturate(0.5);
+}
+
+/* Keep buttons inline on all screen sizes */
+.intro_btn-action {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    justify-content: flex-start;
+    /* gap: 15px; */
+}
+
+/* Responsive button sizing */
+@media (max-width: 768px) {
+    .intro_btn-action {
+        gap: 10px;
+    }
+    
+    .ac_btn {
+        padding: 3px 15px !important;
+        margin-right: 0 !important;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .intro_btn-action {
+        gap: 15px;
+    }
+    
+    .ac_btn {
+        padding: 2px 12px !important;
+        font-size: 13px;
+    }
 }
