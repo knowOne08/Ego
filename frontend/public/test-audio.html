@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #333;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎵 Audio Test Page</h1>
+    <p>Test if the space-odyssey.mp3 file works:</p>
+    
+    <button onclick="testAudio()">▶️ Play Audio</button>
+    <button onclick="stopAudio()">⏹️ Stop Audio</button>
+    
+    <div id="status">Click "Play Audio" to test...</div>
+    
+    <hr>
+    <h2>Using HTML Audio Element:</h2>
+    <audio controls src="/audio/space-odyssey.mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        let audio = null;
+        
+        function log(message) {
+            document.getElementById('status').innerHTML += '<br>' + message;
+            console.log(message);
+        }
+        
+        function testAudio() {
+            log('🎵 Creating audio object...');
+            audio = new Audio('/audio/space-odyssey.mp3');
+            audio.volume = 0.5;
+            
+            log('📝 Audio src: ' + audio.src);
+            log('🔄 Attempting to play...');
+            
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        log('✅ SUCCESS! Audio is playing!');
+                        log('📊 Duration: ' + audio.duration + ' seconds');
+                        log('📊 Volume: ' + audio.volume);
+                    })
+                    .catch(error => {
+                        log('❌ FAILED: ' + error.name + ' - ' + error.message);
+                    });
+            }
+            
+            audio.addEventListener('error', (e) => {
+                log('❌ Audio error: ' + e.target.error.code + ' - ' + e.target.error.message);
+            });
+        }
+        
+        function stopAudio() {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+                log('⏹️ Audio stopped');
+            } else {
+                log('⚠️ No audio playing');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -10,6 +10,7 @@ const API_KEY = 'hello123';
 export const Blog = () => {
     const [selectedTag, setSelectedTag] = useState("All");
     const [blogs, setBlogs] = useState([]);
+    const [blogsWithPages, setBlogsWithPages] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -33,11 +34,39 @@ export const Blog = () => {
             // Filter only published blogs for public view
             const publishedBlogs = data.filter(blog => blog.status === 'published');
             setBlogs(publishedBlogs);
+            
+            // Fetch pages for multi-page blogs
+            const pagesData = {};
+            for (const blog of publishedBlogs) {
+                if (blog.is_multipage) {
+                    try {
+                        const pagesResponse = await fetch(`${API_BASE_URL}/blogs/${blog.id}/pages`, {
+                            headers: { 'X-API-Key': API_KEY }
+                        });
+                        if (pagesResponse.ok) {
+                            const pagesInfo = await pagesResponse.json();
+                            pagesData[blog.id] = pagesInfo.pages || [];
+                        }
+                    } catch (err) {
+                        console.error(`Failed to fetch pages for blog ${blog.id}:`, err);
+                    }
+                }
+            }
+            setBlogsWithPages(pagesData);
         } catch (err) {
             setError(err.message);
         } finally {
             setLoading(false);
         }
+    };
+    
+    // Generate the blog URL - for multi-page blogs, go to first page
+    const getBlogUrl = (blog) => {
+        if (blog.is_multipage && blogsWithPages[blog.id] && blogsWithPages[blog.id].length > 0) {
+            const firstPage = blogsWithPages[blog.id][0];
+            return `/blog/${blog.id}/page/${firstPage.slug}`;
+        }
+        return `/blog/${blog.id}`;
     };
     
     // Get all unique tags
@@ -104,7 +133,18 @@ export const Blog = () => {
                             <Col lg={6} md={12} key={blog.id} className="mb-4">
                                 <div className="blog-card featured-card">
                                     <div className="blog-image-container">
-                                        <img src={blog.image} alt={blog.title} className="blog-image" />
+                                        <img 
+                                            src={blog.cover_light || blog.image} 
+                                            alt={blog.title} 
+                                            className="blog-image blog-cover-light" 
+                                        />
+                                        {blog.cover_dark && (
+                                            <img 
+                                                src={blog.cover_dark} 
+                                                alt={blog.title} 
+                                                className="blog-image blog-cover-dark" 
+                                            />
+                                        )}
                                         <div className="blog-overlay">
                                             <div className="blog-tags">
                                                 {blog.tags.slice(0, 2).map(tag => (
@@ -119,10 +159,15 @@ export const Blog = () => {
                                             <span className="blog-read-time">{blog.readTime}</span>
                                         </div>
                                         <h3 className="blog-card-title">
-                                            <a href={`/blog/${blog.id}`}>{blog.title}</a>
+                                            <a href={getBlogUrl(blog)}>{blog.title}</a>
+                                            {blog.is_multipage && blogsWithPages[blog.id] && blogsWithPages[blog.id].length > 0 && (
+                                                <span className="multipage-badge">
+                                                    {blogsWithPages[blog.id].length} {blogsWithPages[blog.id].length === 1 ? 'page' : 'pages'}
+                                                </span>
+                                            )}
                                         </h3>
                                         <p className="blog-excerpt">{blog.excerpt}</p>
-                                        <a href={`/blog/${blog.id}`} className="read-more">
+                                        <a href={getBlogUrl(blog)} className="read-more">
                                             Read More
                                             <span className="arrow">→</span>
                                         </a>
@@ -140,7 +185,18 @@ export const Blog = () => {
                         {sortedBlogs.map((blog) => (
                             <div key={blog.id} className="blog-card">
                                 <div className="blog-image-container">
-                                    <img src={blog.image} alt={blog.title} className="blog-image" />
+                                    <img 
+                                        src={blog.cover_light || blog.image} 
+                                        alt={blog.title} 
+                                        className="blog-image blog-cover-light" 
+                                    />
+                                    {blog.cover_dark && (
+                                        <img 
+                                            src={blog.cover_dark} 
+                                            alt={blog.title} 
+                                            className="blog-image blog-cover-dark" 
+                                        />
+                                    )}
                                     <div className="blog-overlay">
                                         <div className="blog-tags">
                                             {blog.tags.slice(0, 2).map(tag => (
@@ -155,10 +211,15 @@ export const Blog = () => {
                                         <span className="blog-read-time">{blog.readTime}</span>
                                     </div>
                                     <h3 className="blog-card-title">
-                                        <a href={`/blog/${blog.id}`}>{blog.title}</a>
+                                        <a href={getBlogUrl(blog)}>{blog.title}</a>
+                                        {blog.is_multipage && blogsWithPages[blog.id] && blogsWithPages[blog.id].length > 0 && (
+                                            <span className="multipage-badge">
+                                                {blogsWithPages[blog.id].length} {blogsWithPages[blog.id].length === 1 ? 'page' : 'pages'}
+                                            </span>
+                                        )}
                                     </h3>
                                     <p className="blog-excerpt">{blog.excerpt}</p>
-                                    <a href={`/blog/${blog.id}`} className="read-more">
+                                    <a href={getBlogUrl(blog)} className="read-more">
                                         Read More
                                         <span className="arrow">→</span>
                                     </a>

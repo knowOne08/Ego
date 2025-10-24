@@ -86,19 +86,19 @@
 }
 
 .featured-card {
-    transform: scale(1.02);
     border: 2px solid var(--secondary-color);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* Blog Grid */
+/* Blog Grid - Two per row for better layout */
 .blog-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
     margin-bottom: 2rem;
 }
 
-/* Blog Cards */
+/* Blog Cards - Vertical layout */
 .blog-card {
     background: var(--primary-color);
     border-radius: 12px;
@@ -106,19 +106,21 @@
     transition: all 0.4s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
-    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .blog-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-4px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     border-color: var(--secondary-color);
 }
 
-/* Blog Image */
+/* Blog Image - Square/Portrait */
 .blog-image-container {
     position: relative;
-    height: 250px;
+    height: 280px;
     overflow: hidden;
 }
 
@@ -127,6 +129,37 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.4s ease;
+}
+
+/* Dark/Light mode cover image switching */
+.blog-cover-dark {
+    display: none;
+}
+
+[data-theme="dark"] .blog-cover-light {
+    display: none;
+}
+
+[data-theme="dark"] .blog-cover-dark {
+    display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+    .blog-cover-light {
+        display: none;
+    }
+    
+    .blog-cover-dark {
+        display: block;
+    }
+    
+    [data-theme="light"] .blog-cover-light {
+        display: block;
+    }
+    
+    [data-theme="light"] .blog-cover-dark {
+        display: none;
+    }
 }
 
 .blog-card:hover .blog-image {
@@ -170,12 +203,38 @@
 
 /* Blog Content */
 .blog-content {
-    padding: 1.5rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Multi-page Badge */
+.multipage-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: transparent;
+    color: var(--text_color_2);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 400;
+    margin-left: 0.6rem;
+    vertical-align: middle;
+    border: 1px solid var(--text_color_2);
+    opacity: 0.6;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+}
+
+.multipage-badge:hover {
+    opacity: 0.9;
 }
 
 .blog-meta {
     display: flex;
-    justify-content: space-between;
+    gap: 1rem;
     align-items: center;
     margin-bottom: 1rem;
     font-size: 0.85rem;
@@ -191,9 +250,9 @@
 
 .blog-card-title {
     margin-bottom: 1rem;
-    font-size: 1.4rem;
+    font-size: 1.8rem;
     font-weight: 400;
-    line-height: 1.4;
+    line-height: 1.3;
 }
 
 .blog-card-title a {
@@ -208,9 +267,9 @@
 
 .blog-excerpt {
     color: var(--text_color_2);
-    line-height: 1.6;
+    line-height: 1.7;
     margin-bottom: 1.5rem;
-    font-size: 0.95rem;
+    font-size: 1rem;
     opacity: 0.8;
 }
 
@@ -300,6 +359,12 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
     .blog-container {
         padding: 1rem 0.5rem;
@@ -314,8 +379,12 @@
     }
     
     .blog-grid {
-        grid-template-columns: 1fr;
         gap: 1.5rem;
+        grid-template-columns: 1fr;
+    }
+    
+    .blog-image-container {
+        height: 250px;
     }
     
     .tag-filter {
@@ -327,12 +396,12 @@
         font-size: 0.8rem;
     }
     
-    .blog-image-container {
-        height: 200px;
-    }
-    
     .featured-card {
         transform: none;
+    }
+    
+    .blog-card-title {
+        font-size: 1.5rem;
     }
 }
 
@@ -342,11 +411,15 @@
     }
     
     .blog-content {
-        padding: 1rem;
+        padding: 1.5rem;
     }
     
     .blog-card-title {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
+    }
+    
+    .blog-image-container {
+        height: 200px;
     }
 }
 

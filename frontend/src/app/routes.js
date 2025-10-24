@@ -39,6 +39,7 @@ const AnimatedRoutes = withRouter(({ location }) => (
         <Route path="/poetry" element={<PoetryCollection />} />
         <Route path="/poetry/*" element={<PoetryCard/>} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:blogId/page/:pageSlug" element={<BlogPost />} />
         <Route path="/blog/:blogId" element={<BlogPost />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/new" element={<BlogEditor />} />
