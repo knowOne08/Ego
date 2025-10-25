@@ -22,8 +22,26 @@ const apiKey = process.env.API_KEY || 'your-secret-api-key';
 
 // Security middleware
 app.use(helmet());
+
+// CORS configuration for production and development
+const allowedOrigins = [
+  'http://localhost:3000', 
+  'http://localhost:3001',
+  'https://your-vercel-app.vercel.app', // Replace with your actual Vercel domain
+  'https://ego-frontend.vercel.app', // Example - replace with your actual domain
+];
+
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'], // React dev server
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
