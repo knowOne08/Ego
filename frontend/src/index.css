@@ -11,6 +11,7 @@
     /* RGB versions for rgba() usage */
     --primary-color-rgb: 13, 13, 13;
     --overlay-color-rgb: 12, 12, 12;
+    --text-color-rgb: 255, 255, 255;
     --text-color-3-rgb: 255, 1, 79;
     --text-color-accent-rgb: 255, 107, 107;
 }
@@ -28,6 +29,7 @@
     /* RGB versions for rgba() usage */
     --primary-color-rgb: 255, 255, 255;
     --overlay-color-rgb: 255, 255, 255;
+    --text-color-rgb: 0, 0, 0;
     --text-color-3-rgb: 255, 1, 79;
     --text-color-accent-rgb: 255, 71, 87;
 }

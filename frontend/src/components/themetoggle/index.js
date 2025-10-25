@@ -12,7 +12,12 @@ const Themetoggle = () => {
   
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme); 
+    localStorage.setItem('theme', theme);
+    
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new CustomEvent('themeChanged', {
+      detail: { theme }
+    }));
   }, [theme]);
 
   // Listen for theme changes from other components (like blog post)

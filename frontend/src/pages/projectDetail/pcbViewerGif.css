@@ -1,0 +1,88 @@
+/* GIF Background Container */
+.pcb-gif-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+/* GIF Background Image */
+.pcb-gif-background {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover the entire container */
+  object-position: center;
+  opacity: 0.6; /* Slightly transparent for background effect */
+  filter: blur(1px); /* Subtle blur for depth */
+}
+
+/* Alternative: contain to show full GIF */
+.pcb-gif-background.contain {
+  object-fit: contain;
+}
+
+/* 3D Viewer Container */
+.pcb-viewer-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none; /* Background, non-interactive */
+}
+
+.pcb-viewer-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0.7;
+  filter: brightness(0.8);
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .pcb-gif-background {
+    opacity: 0.4;
+    filter: blur(1px) brightness(0.8);
+  }
+
+  .pcb-viewer-container canvas {
+    filter: brightness(0.6);
+  }
+}
+
+/* Light mode adjustments */
+@media (prefers-color-scheme: light) {
+  .pcb-gif-background {
+    opacity: 0.5;
+    filter: blur(1px) brightness(1.1);
+  }
+
+  .pcb-viewer-container canvas {
+    filter: brightness(0.4) contrast(2.5) saturate(1.8) drop-shadow(0 0 10px rgba(0,0,0,0.8));
+    background: radial-gradient(circle at center, rgba(0,0,0,0.2), rgba(0,0,0,0.1)) !important;
+  }
+  
+  .pcb-viewer-container {
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(0,0,0,0.1));
+    position: relative;
+  }
+  
+  /* Add a subtle vignette effect */
+  .pcb-viewer-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.1) 80%);
+    pointer-events: none;
+    z-index: 1;
+  }
+}

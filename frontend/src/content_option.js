@@ -248,6 +248,7 @@ const dataportfolio = [
         category: "Aerospace",
         technologies: ["ESP8266", "BMP280", "C++", "PCB Design"],
         isMainProject: true,
+        modelPath: "/models/C6.glb", // ← Using existing model for testing
         duration: "2 months",
         teamSize: "Solo",
         problem: "Ananta rocket team needed a reliable flight computer for their model rockets to track altitude, detect apogee, and deploy recovery systems. Commercial options were expensive and not customizable for our specific requirements.",
@@ -299,6 +300,7 @@ const dataportfolio = [
         category: "Aerospace",
         technologies: ["Redundant Sensors", "COTS Design", "Pyro Channels", "ESP32", "IMU", "BMP388"],
         funding: "BagelFund ($490)",
+        modelPath: "/models/C6.glb",
         isMainProject: true,
         duration: "4 months",
         teamSize: "Solo",
@@ -319,7 +321,9 @@ const dataportfolio = [
         link: "https://github.com/knowOne08/zer0",
         category: "Aerospace",
         technologies: ["Miniaturization", "Flash Memory", "PWM"],
-        isMainProject: true
+        isMainProject: true,
+        modelPath: "/models/zer0.glb", // ← Using existing model for testing
+
     },
     {
         title: "Pavisys",
@@ -327,7 +331,8 @@ const dataportfolio = [
         link: "https://github.com/knowOne08/pavisys",
         category: "Aerospace",
         technologies: ["PCB Design", "Data Logging", "UAV Systems"],
-        isMainProject: true
+        isMainProject: true,
+        modelPath: "/models/pavisys.glb", // ← Using existing model for testing
     },
     {
         title: "Avon",

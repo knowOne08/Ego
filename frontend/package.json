@@ -3,6 +3,8 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@react-three/drei": "^9.122.0",
+        "@react-three/fiber": "^8.18.0",
         "@types/jest": "^29.5.8",
         "bootstrap": "^5.2.3",
         "emailjs-com": "^3.2.0",
@@ -19,6 +21,7 @@
         "rehype-raw": "^7.0.0",
         "rehype-sanitize": "^6.0.0",
         "remark-gfm": "^4.0.1",
+        "three": "^0.180.0",
         "typewriter-effect": "^2.18.2",
         "web-vitals": "^3.1.1"
     },
