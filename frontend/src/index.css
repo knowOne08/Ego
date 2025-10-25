@@ -4,8 +4,16 @@
     --secondary-color: #fff;
     --text-color: #fff;
     --text-color-2: #fff;
-    --text-color-3: rgb(204, 0, 0);
+    --text-color-3: #ff014f;
+    --text-color-accent: #ff6b6b;
     --overlay-color: rgb(12 12 12 / 63%);
+    
+    /* RGB versions for rgba() usage */
+    --primary-color-rgb: 13, 13, 13;
+    --overlay-color-rgb: 12, 12, 12;
+    --text-color-rgb: 255, 255, 255;
+    --text-color-3-rgb: 255, 1, 79;
+    --text-color-accent-rgb: 255, 107, 107;
 }
 
 [data-theme="light"] {
@@ -14,8 +22,16 @@
     --secondary-color: #000;
     --text-color: #000;
     --text-color-2: #000;
-    --text-color-3: rgb(204, 0, 0);
+    --text-color-3: #ff014f;
+    --text-color-accent: #ff4757;
     --overlay-color: rgb(255 255 255 / 70%);
+    
+    /* RGB versions for rgba() usage */
+    --primary-color-rgb: 255, 255, 255;
+    --overlay-color-rgb: 255, 255, 255;
+    --text-color-rgb: 0, 0, 0;
+    --text-color-3-rgb: 255, 1, 79;
+    --text-color-accent-rgb: 255, 71, 87;
 }
 
 html,

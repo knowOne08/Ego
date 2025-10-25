@@ -356,12 +356,15 @@
 }
 
 .project-card-link .project-card::after {
-    content: '↗';
+    content: '';
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 1.2rem;
-    color: var(--text-color-3);
+    top: 1.2rem;
+    right: 1.2rem;
+    width: 12px;
+    height: 12px;
+    border-top: 2px solid var(--text-color-3);
+    border-right: 2px solid var(--text-color-3);
+    transform: rotate(45deg);
     opacity: 0;
     transition: opacity 0.3s ease;
 }

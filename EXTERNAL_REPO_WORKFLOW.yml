@@ -1,0 +1,585 @@
+name: Sync Blogs to Portfolio
+
+on:
+  push:
+    branches: [ main ]
+    # Remove path restriction to trigger on any change for now
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  sync-blogs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout GitBook repo
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: |
+        npm init -y
+        npm install @supabase/supabase-js marked front-matter glob
+
+    - name: Create sync script
+      run: |
+        cat > sync-blogs.js << 'EOF'
+        const { createClient } = require('@supabase/supabase-js');
+        const fs = require('fs').promises;
+        const path = require('path');
+        const { marked } = require('marked');
+        const frontMatter = require('front-matter');
+        const glob = require('glob');
+
+        // Initialize Supabase client
+        const supabase = createClient(
+          process.env.SUPABASE_URL,
+          process.env.SUPABASE_SERVICE_KEY
+        );
+
+        // GitHub raw content base URL for THIS external repo
+        const GITHUB_RAW_BASE = `https://raw.githubusercontent.com/${process.env.GITHUB_REPOSITORY}/main`;
+
+        class GitBookBlogSync {
+          constructor() {
+            this.blogDir = '.'; // Look in root directory instead of 'blogs' folder
+            this.processedBlogs = [];
+            this.errors = [];
+            this.pageConnections = new Map(); // Track page relationships
+          }
+
+          async syncAllBlogs() {
+            try {
+              console.log('🚀 Starting GitBook blog sync...');
+              
+              // Find README.md files in root-level folders (excluding .github and node_modules)
+              const blogFiles = glob.sync('*/README.md', {
+                ignore: ['.github/**', 'node_modules/**', '.git/**']
+              });
+              console.log(`📚 Found ${blogFiles.length} blog(s) to process`);
+              console.log(`📁 Blog files found: ${blogFiles.join(', ')}`);
+
+              if (blogFiles.length === 0) {
+                console.log('⚠️  No blog files found. Make sure each blog folder has a README.md file.');
+                console.log('📂 Expected structure: YourBlogFolder/README.md');
+                return;
+              }
+
+              // Process each blog folder for multi-page content
+              for (const filePath of blogFiles) {
+                try {
+                  await this.processBlogFolder(filePath);
+                } catch (error) {
+                  console.error(`❌ Error processing ${filePath}:`, error.message);
+                  this.errors.push({ file: filePath, error: error.message });
+                }
+              }
+
+
+
+              console.log(`✅ Successfully processed ${this.processedBlogs.length} blogs`);
+              if (this.errors.length > 0) {
+                console.log(`⚠️  ${this.errors.length} errors occurred`);
+                this.errors.forEach(err => console.log(`   - ${err.file}: ${err.error}`));
+              }
+
+            } catch (error) {
+              console.error('💥 Fatal error during sync:', error);
+              process.exit(1);
+            }
+          }
+
+          async processBlogFolder(readmePath) {
+            const blogFolder = path.dirname(readmePath);
+            console.log(`📁 Processing blog folder: ${blogFolder}`);
+
+            // Check for SUMMARY.md to detect multi-page structure
+            const summaryPath = path.join(blogFolder, 'SUMMARY.md');
+            const hasSummary = await this.fileExists(summaryPath);
+
+            if (hasSummary) {
+              console.log(`📑 Found SUMMARY.md - processing multi-page blog`);
+              await this.processMultiPageBlog(blogFolder, summaryPath);
+            } else {
+              console.log(`📄 Single page blog - processing README.md`);
+              await this.processBlog(readmePath);
+            }
+          }
+
+          async fileExists(filePath) {
+            try {
+              await fs.access(filePath);
+              return true;
+            } catch {
+              return false;
+            }
+          }
+
+          async processMultiPageBlog(blogFolder, summaryPath) {
+            try {
+              // Read README.md for blog metadata
+              const readmePath = path.join(blogFolder, 'README.md');
+              const readmeContent = await fs.readFile(readmePath, 'utf-8');
+              const readmeParsed = frontMatter(readmeContent);
+              
+              // Extract blog metadata
+              const blogMetadata = this.extractMetadata(readmeParsed, blogFolder);
+              
+              // Parse SUMMARY.md for pages
+              const summaryContent = await fs.readFile(summaryPath, 'utf-8');
+              const pages = this.parseSummary(summaryContent, blogFolder);
+              
+              console.log(`📖 Processing multi-page blog with ${pages.length} pages`);
+              
+              // Create slug from folder name
+              const slug = blogFolder.toLowerCase()
+                .replace(/[^a-z0-9 -]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim('-');
+              
+              // Create/update the main blog entry
+              const blog = await this.upsertBlog(blogMetadata, readmeParsed.body, slug, blogFolder, true, pages.length);
+              
+              // Now create/update all blog_pages
+              for (let i = 0; i < pages.length; i++) {
+                const page = pages[i];
+                const pagePath = path.join(blogFolder, page.file);
+                
+                if (await this.fileExists(pagePath)) {
+                  const pageContent = await fs.readFile(pagePath, 'utf-8');
+                  const pageParsed = frontMatter(pageContent);
+                  
+                  // Process page content
+                  const processedContent = await this.processAssets(pageParsed.body, blogFolder, blogFolder);
+                  
+                  // Create page slug from filename
+                  const pageSlug = page.file.replace('.md', '').toLowerCase()
+                    .replace(/[^a-z0-9 -]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .trim('-');
+                  
+                  await this.upsertBlogPage(blog.id, page.title, pageSlug, i, processedContent);
+                  
+                  console.log(`  ✅ Page ${i + 1}/${pages.length}: ${page.title}`);
+                }
+              }
+              
+              this.processedBlogs.push({
+                title: blogMetadata.title,
+                slug: slug,
+                folder: blogFolder,
+                pageCount: pages.length
+              });
+              
+            } catch (error) {
+              throw new Error(`Failed to process multi-page blog: ${error.message}`);
+            }
+          }
+
+          createPageSlug(blogFolder, pageIndex) {
+            const baseSlug = blogFolder.toLowerCase()
+              .replace(/[^a-z0-9 -]/g, '')
+              .replace(/\s+/g, '-')
+              .replace(/-+/g, '-')
+              .trim('-');
+            
+            return pageIndex === 0 ? baseSlug : `${baseSlug}-part-${pageIndex + 1}`;
+          }
+
+          parseSummary(summaryContent, blogFolder) {
+            const pages = [];
+            const lines = summaryContent.split('\n');
+            
+            for (const line of lines) {
+              // Match GitBook summary format: * [Title](file.md)
+              const match = line.match(/\*\s*\[([^\]]+)\]\(([^)]+)\)/);
+              if (match) {
+                const [, title, file] = match;
+                pages.push({
+                  title: title.trim(),
+                  file: file.trim()
+                });
+              }
+            }
+            
+            return pages;
+          }
+
+          createAnchor(title) {
+            return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+          }
+
+          async processBlog(filePath) {
+            console.log(`📖 Processing: ${filePath}`);
+            
+            const blogFolder = path.dirname(filePath).split('/').pop();
+            const blogFolderPath = path.dirname(filePath);
+            
+            const content = await fs.readFile(filePath, 'utf-8');
+            const parsed = frontMatter(content);
+            
+            const metadata = this.extractMetadata(parsed, blogFolder);
+            const processedContent = await this.processAssets(parsed.body, blogFolderPath, blogFolder);
+            
+            // Create slug from folder name (handle special characters)
+            const slug = blogFolder.toLowerCase()
+              .replace(/[^a-z0-9 -]/g, '')
+              .replace(/\s+/g, '-')
+              .replace(/-+/g, '-')
+              .trim('-');
+            
+            // Single-page blog: is_multipage = false, page_count = 1
+            await this.upsertBlog(metadata, processedContent, slug, blogFolder, false, 1);
+            
+            this.processedBlogs.push({
+              title: metadata.title,
+              slug: slug,
+              folder: blogFolderPath
+            });
+          }
+
+          getFrontmatterBlock(mdText) {
+            const m = mdText.match(/^---\s*\n([\s\S]*?)\n---/);
+            return m ? m[1] : null;
+          }
+
+          parseCoverAndBasic(frontYaml) {
+            if (!frontYaml) return null;
+
+            const lines = frontYaml.split('\n');
+            let i = 0;
+            const result = {};
+            
+            while (i < lines.length) {
+              const line = lines[i];
+              const topKeyMatch = line.match(/^([^\s:]+):\s*(.*)$/);
+              
+              if (topKeyMatch) {
+                const key = topKeyMatch[1];
+                const rest = topKeyMatch[2];
+
+                if (key === 'cover') {
+                  // collect indented cover lines
+                  const cover = {};
+                  i++;
+                  while (i < lines.length && /^\s{2,}/.test(lines[i])) {
+                    const covMatch = lines[i].trim().match(/^([^\s:]+):\s*>\-\s*$/);
+                    if (covMatch) {
+                      const subKey = covMatch[1];
+                      i++;
+                      // gather following non-empty line(s) that look like a URL
+                      let urlLine = '';
+                      while (i < lines.length && lines[i].trim() === '') i++;
+                      if (i < lines.length) {
+                        urlLine = lines[i].trim();
+                      }
+                      cover[subKey] = urlLine;
+                    } else {
+                      // fallback: try simple "key: value" inside cover
+                      const kv = lines[i].trim().match(/^([^:]+):\s*(.+)$/);
+                      if (kv) cover[kv[1]] = kv[2];
+                    }
+                    i++;
+                  }
+                  result.cover = cover;
+                  continue;
+                } else if (key === 'layout') {
+                  // collect layout block
+                  const layout = {};
+                  i++;
+                  while (i < lines.length && /^\s{2,}/.test(lines[i])) {
+                    const layoutMatch = lines[i].trim().match(/^([^\s:]+):\s*(.*)$/);
+                    if (layoutMatch) {
+                      const layoutKey = layoutMatch[1];
+                      const layoutRest = layoutMatch[2];
+                      
+                      if (layoutKey === 'cover' && layoutRest === '') {
+                        // nested cover config
+                        const coverConfig = {};
+                        i++;
+                        while (i < lines.length && /^\s{4,}/.test(lines[i])) {
+                          const covConfigMatch = lines[i].trim().match(/^([^:]+):\s*(.+)$/);
+                          if (covConfigMatch) {
+                            const val = covConfigMatch[2];
+                            coverConfig[covConfigMatch[1]] = val === 'true' ? true : val === 'false' ? false : val;
+                          }
+                          i++;
+                        }
+                        layout.cover = coverConfig;
+                        continue;
+                      } else {
+                        layout[layoutKey] = layoutRest;
+                      }
+                    }
+                    i++;
+                  }
+                  result.layout = layout;
+                  continue;
+                } else {
+                  // simple top-level key
+                  if (rest !== '') {
+                    const val = rest.trim();
+                    const num = Number(val);
+                    result[key] = isNaN(num) ? val : num;
+                  } else {
+                    result[key] = '';
+                  }
+                }
+              }
+              i++;
+            }
+
+            return result;
+          }
+
+          extractMetadata(parsed, blogFolder) {
+            const { attributes, body } = parsed;
+            
+            // Get raw frontmatter text for custom parsing
+            const fullContent = parsed.frontmatter || '';
+            const frontYaml = this.getFrontmatterBlock('---\n' + fullContent + '\n---');
+            const parsedFront = this.parseCoverAndBasic(frontYaml) || {};
+            
+            // Use the folder name as the title (exact as it appears in GitHub)
+            // This ensures the title matches the GitHub folder structure
+            const title = blogFolder;
+            
+            let excerpt = attributes.excerpt || attributes.description || parsedFront.description;
+            if (!excerpt) {
+              const paragraphMatch = body.match(/^(?!#)(.+)$/m);
+              excerpt = paragraphMatch ? paragraphMatch[1].substring(0, 200) + '...' : '';
+            }
+            
+            const wordCount = body.split(/\s+/).length;
+            const readTime = Math.ceil(wordCount / 200);
+            
+            // Extract cover art from parsed frontmatter
+            const cover = parsedFront.cover || {};
+            const layout = parsedFront.layout || {};
+            const coverConfig = layout.cover || {};
+            
+            return {
+              title: title.trim(),
+              excerpt: excerpt.trim(),
+              tags: attributes.tags || attributes.categories || [],
+              featured: attributes.featured || false,
+              date: attributes.date || new Date().toISOString().split('T')[0],
+              read_time: `${readTime} min read`,
+              status: attributes.status || 'published',
+              // Cover art fields (raw URLs from YAML - will be processed by backend)
+              cover_light: cover.light || null,
+              cover_dark: cover.dark || null,
+              cover_y: parsedFront.coverY || 0,
+              cover_visible: coverConfig.visible !== false,
+              cover_size: coverConfig.size || 'hero'
+            };
+          }
+
+          async processAssets(content, blogFolderPath, blogFolder) {
+            let processedContent = content;
+            
+            // Handle GitBook-specific assets - fix URL encoding issue
+            processedContent = processedContent
+              // Convert GitBook figure HTML to markdown first
+              .replace(/<div align="left"><figure><img src="([^"]*)"[^>]*><figcaption><p>(.*?)<\/p><\/figcaption><\/figure>/g, '![$2]($1)')
+              .replace(/<figure><img src="([^"]*)"[^>]*><figcaption><p>(.*?)<\/p><\/figcaption><\/figure>/g, '![$2]($1)')
+              // Handle GitBook drawings
+              .replace(/<img[^>]*src="([^"]*)"[^>]*class="gitbook-drawing"[^>]*>/g, '![]($1)')
+              // Clean up any remaining HTML img tags
+              .replace(/<img[^>]*src="([^"]*)"[^>]*alt="([^"]*)"[^>]*>/g, '![$2]($1)');
+            
+            // Convert GitBook asset paths with proper encoding (do this after HTML processing)
+            const encodedBlogFolder = encodeURIComponent(blogFolder);
+            processedContent = processedContent.replace(
+              /\.gitbook\/assets\/([^)\s]+)/g, 
+              (match, assetPath) => {
+                const encodedAssetPath = encodeURIComponent(assetPath);
+                return `${GITHUB_RAW_BASE}/${encodedBlogFolder}/.gitbook/assets/${encodedAssetPath}`;
+              }
+            );
+            
+            // Process standard markdown images
+            const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+            let match;
+            
+            while ((match = imageRegex.exec(processedContent)) !== null) {
+              const [fullMatch, altText, imagePath] = match;
+              
+              if (imagePath.startsWith('http')) continue;
+              
+              try {
+                let githubAssetUrl;
+                
+                // Handle different asset path formats with proper URL encoding
+                const encodedBlogFolder = encodeURIComponent(blogFolder);
+                let cleanImagePath = imagePath;
+                
+                // Remove leading './' if present
+                if (imagePath.startsWith('./')) {
+                  cleanImagePath = imagePath.substring(2);
+                }
+                
+                // Encode the entire path properly, handling spaces and special characters
+                const pathParts = cleanImagePath.split('/');
+                const encodedPathParts = pathParts.map(part => encodeURIComponent(part));
+                const encodedImagePath = encodedPathParts.join('/');
+                
+                if (imagePath.startsWith('./')) {
+                  githubAssetUrl = `${GITHUB_RAW_BASE}/${encodedBlogFolder}/${encodedImagePath}`;
+                } else if (imagePath.startsWith('.gitbook/')) {
+                  // For .gitbook paths, encode everything after the folder
+                  const gitbookPathParts = imagePath.split('/');
+                  const encodedGitbookParts = gitbookPathParts.map(part => encodeURIComponent(part));
+                  githubAssetUrl = `${GITHUB_RAW_BASE}/${encodedBlogFolder}/${encodedGitbookParts.join('/')}`;
+                } else if (!imagePath.startsWith('http')) {
+                  githubAssetUrl = `${GITHUB_RAW_BASE}/${encodedBlogFolder}/${encodedImagePath}`;
+                } else {
+                  // Skip if already a full URL
+                  continue;
+                }
+                
+                const fileExtension = path.extname(imagePath).toLowerCase();
+                const isVideo = ['.mp4', '.webm', '.mov', '.avi'].includes(fileExtension);
+                const isDrawing = imagePath.includes('.excalidraw') || imagePath.includes('drawing');
+                
+                processedContent = processedContent.replace(fullMatch, 
+                  `![${altText}](${githubAssetUrl})`);
+                
+                const emoji = isVideo ? '📹' : isDrawing ? '🎨' : '🖼️';
+                console.log(`${emoji} Using GitHub raw URL for: ${imagePath}`);
+              } catch (error) {
+                console.warn(`⚠️  Could not process asset ${imagePath}:`, error.message);
+              }
+            }
+            
+            return processedContent;
+          }
+
+          async upsertBlog(metadata, content, slug, githubFolder = null, isMultipage = false, pageCount = 1) {
+            try {
+              const { data: existing } = await supabase
+                .from('blogs')
+                .select('id')
+                .eq('slug', slug)
+                .single();
+
+              // Core blog data (fields that should exist in all schemas)
+              const blogData = {
+                title: metadata.title,
+                excerpt: metadata.excerpt,
+                content: content,
+                date: metadata.date,
+                read_time: metadata.read_time,
+                tags: JSON.stringify(metadata.tags),
+                featured: metadata.featured,
+                slug: slug,
+                status: metadata.status,
+                is_multipage: isMultipage,
+                page_count: pageCount,
+                github_folder_name: githubFolder,  // Store actual GitHub folder name for asset URLs
+                updated_at: new Date().toISOString()
+              };
+
+              // Add cover art fields if they exist
+              if (metadata.cover_light !== undefined && metadata.cover_light !== null) {
+                blogData.cover_light = metadata.cover_light;
+              }
+              if (metadata.cover_dark !== undefined && metadata.cover_dark !== null) {
+                blogData.cover_dark = metadata.cover_dark;
+              }
+              if (metadata.cover_y !== undefined) {
+                blogData.cover_y = metadata.cover_y;
+              }
+              if (metadata.cover_visible !== undefined) {
+                blogData.cover_visible = metadata.cover_visible;
+              }
+              if (metadata.cover_size !== undefined) {
+                blogData.cover_size = metadata.cover_size;
+              }
+
+              if (existing) {
+                const { data, error } = await supabase
+                  .from('blogs')
+                  .update(blogData)
+                  .eq('id', existing.id)
+                  .select()
+                  .single();
+                
+                if (error) throw error;
+                console.log(`✅ Updated blog: ${metadata.title}`);
+                return data;
+              } else {
+                const { data, error } = await supabase
+                  .from('blogs')
+                  .insert([blogData])
+                  .select()
+                  .single();
+                
+                if (error) throw error;
+                console.log(`🆕 Created new blog: ${metadata.title}`);
+                return data;
+              }
+            } catch (error) {
+              throw new Error(`Failed to upsert blog ${slug}: ${error.message}`);
+            }
+          }
+
+          async upsertBlogPage(blogId, title, slug, pageOrder, content) {
+            try {
+              const { data: existing } = await supabase
+                .from('blog_pages')
+                .select('id')
+                .eq('blog_id', blogId)
+                .eq('slug', slug)
+                .single();
+
+              const pageData = {
+                blog_id: blogId,
+                title: title,
+                slug: slug,
+                page_order: pageOrder,
+                content: content,
+                updated_at: new Date().toISOString()
+              };
+
+              if (existing) {
+                const { error } = await supabase
+                  .from('blog_pages')
+                  .update(pageData)
+                  .eq('id', existing.id);
+                
+                if (error) throw error;
+              } else {
+                const { error } = await supabase
+                  .from('blog_pages')
+                  .insert([pageData]);
+                
+                if (error) throw error;
+              }
+            } catch (error) {
+              throw new Error(`Failed to upsert blog page ${slug}: ${error.message}`);
+            }
+          }
+        }
+
+        async function main() {
+          const sync = new GitBookBlogSync();
+          await sync.syncAllBlogs();
+        }
+
+        main().catch(console.error);
+        EOF
+
+    - name: Run blog sync
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+      run: node sync-blogs.js

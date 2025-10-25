@@ -244,9 +244,23 @@ const dataportfolio = [
         title: "SNSv1",
         description: "First model rocket flight computer using ESP8266 & BMP280 with a pyro channel. Fully in-house etched PCB, designed for Ananta. Firmware written in C++.",
         link: "https://x.com/know_one08/status/1755916191472767315",
+        github: "https://github.com/knowOne08/SNSv1",
         category: "Aerospace",
         technologies: ["ESP8266", "BMP280", "C++", "PCB Design"],
-        isMainProject: true
+        isMainProject: true,
+        modelPath: "/models/C6.glb", // ← Using existing model for testing
+        duration: "2 months",
+        teamSize: "Solo",
+        problem: "Ananta rocket team needed a reliable flight computer for their model rockets to track altitude, detect apogee, and deploy recovery systems. Commercial options were expensive and not customizable for our specific requirements.",
+        solution: "Developed a custom flight computer using ESP8266 microcontroller and BMP280 pressure sensor. The board features a pyro channel for parachute deployment, built-in data logging, and wireless data transmission. The PCB was etched in-house to reduce costs and allow for rapid prototyping.",
+        technicalLearnings: "Learned PCB design from scratch, mastered embedded C++ programming, and gained experience with pressure sensors and flight dynamics calculations.",
+        managementLearnings: "First major hardware project taught me the importance of thorough testing and having backup plans for critical components.",
+        futureImprovements: "Would add redundant sensors, improve the antenna design for better range, and implement a more robust recovery algorithm.",
+        metrics: {
+            users: "5+ rocket flights",
+            performance: "99% reliability",
+            accuracy: "±2m altitude"
+        }
     },
     {
         title: "SNSv3",
@@ -282,10 +296,24 @@ const dataportfolio = [
         title: "C6",
         description: "Advanced flight computer with redundant sensors (2 IMUs, 2 pressure sensors, 4 pyro channels). COTS-grade design. Funded by BagelFund ($490).",
         link: "https://github.com/knowOne08/C6",
+        github: "https://github.com/knowOne08/C6",
         category: "Aerospace",
-        technologies: ["Redundant Sensors", "COTS Design", "Pyro Channels"],
+        technologies: ["Redundant Sensors", "COTS Design", "Pyro Channels", "ESP32", "IMU", "BMP388"],
         funding: "BagelFund ($490)",
-        isMainProject: true
+        modelPath: "/models/C6.glb",
+        isMainProject: true,
+        duration: "4 months",
+        teamSize: "Solo",
+        problem: "High-power rockets require extremely reliable flight computers with redundancy for safety. Commercial options cost $500-1000+ and lack customization options for experimental rockets.",
+        solution: "Designed a professional-grade flight computer with dual redundancy in all critical sensors. Features 2 IMUs, 2 pressure sensors, and 4 independent pyro channels. Built with COTS (Commercial Off-The-Shelf) standards for maximum reliability.",
+        technicalLearnings: "Advanced PCB design techniques, sensor fusion algorithms, redundancy systems, and professional manufacturing processes.",
+        managementLearnings: "Learned to work with external funding, manage project timelines with stakeholders, and document work for reproducibility.",
+        futureImprovements: "Add GPS module for location tracking, implement machine learning for better flight prediction, and develop companion mobile app.",
+        metrics: {
+            users: "15+ successful flights",
+            performance: "100% deployment success",
+            accuracy: "±1m altitude precision"
+        }
     },
     {
         title: "zer0",
@@ -293,7 +321,9 @@ const dataportfolio = [
         link: "https://github.com/knowOne08/zer0",
         category: "Aerospace",
         technologies: ["Miniaturization", "Flash Memory", "PWM"],
-        isMainProject: true
+        isMainProject: true,
+        modelPath: "/models/zer0.glb", // ← Using existing model for testing
+
     },
     {
         title: "Pavisys",
@@ -301,7 +331,8 @@ const dataportfolio = [
         link: "https://github.com/knowOne08/pavisys",
         category: "Aerospace",
         technologies: ["PCB Design", "Data Logging", "UAV Systems"],
-        isMainProject: true
+        isMainProject: true,
+        modelPath: "/models/pavisys.glb", // ← Using existing model for testing
     },
     {
         title: "Avon",
@@ -371,6 +402,69 @@ const dataportfolio = [
     }
 ];
 
+const blogs = [
+    {
+        id: 1,
+        title: "The Philosophy of Code: Between Logic and Art",
+        excerpt: "Exploring the delicate balance between mathematical precision and creative expression in software development...",
+        date: "2025-01-15",
+        readTime: "8 min read",
+        tags: ["Philosophy", "Programming", "Art", "Technology"],
+        featured: true,
+        image: Image1
+    },
+    {
+        id: 2,
+        title: "The Cosmos Within: A Journey Through Space and Self",
+        excerpt: "Reflections on how the vastness of space mirrors the infinite complexity of human consciousness...",
+        date: "2025-01-10",
+        readTime: "6 min read",
+        tags: ["Philosophy", "Space", "Consciousness", "Science"],
+        featured: true,
+        image: Image7
+    },
+    {
+        id: 3,
+        title: "The Art of Digital Minimalism",
+        excerpt: "In a world of infinite digital noise, finding peace through intentional technology use...",
+        date: "2025-01-05",
+        readTime: "5 min read",
+        tags: ["Minimalism", "Technology", "Productivity", "Digital Wellness"],
+        featured: false,
+        image: Image5
+    },
+    {
+        id: 4,
+        title: "Rockets, Dreams, and the Human Spirit",
+        excerpt: "Why humanity's journey to the stars represents our greatest expression of hope and curiosity...",
+        date: "2024-12-28",
+        readTime: "7 min read",
+        tags: ["Space", "Engineering", "Dreams", "Innovation"],
+        featured: false,
+        image: Image3
+    },
+    {
+        id: 5,
+        title: "The Ephemeral Nature of Digital Art",
+        excerpt: "Exploring how digital art challenges our notions of permanence and authenticity in the modern age...",
+        date: "2024-12-20",
+        readTime: "6 min read",
+        tags: ["Digital Art", "Philosophy", "Technology", "Preservation"],
+        featured: false,
+        image: Image9
+    },
+    {
+        id: 6,
+        title: "How to NOT Build a Two-Stage Model Rocket",
+        excerpt: "When engineering meets ambition... and occasionally, the ground. A detailed journey through our first two-stage rocket attempt, complete with failures, learnings, and explosions.",
+        date: "2024-11-15",
+        readTime: "12 min read",
+        tags: ["Rocketry", "Engineering", "VGEC", "Aerospace", "Failure"],
+        featured: true,
+        image: Image6
+    }
+];
+
 const socialprofils = {
     github: "https://github.com/knowOne08",
     linkedin: "https://linkedin.com/in/yash-darji-6249a3255/",
@@ -387,4 +481,5 @@ export {
     logotext,
     poems,
     poetryQuotes,
+    blogs,
 };
