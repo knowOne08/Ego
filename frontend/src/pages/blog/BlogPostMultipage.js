@@ -3,9 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { marked } from "marked";
 import "./blogPost.css";
-
-const API_BASE_URL = 'http://localhost:3003/api';
-const API_KEY = 'hello123';
+import { API_BASE_URL, API_KEY } from "../../config/api";
 
 export const BlogPost = () => {
     const { slug, pageSlug } = useParams();

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './editor.css';
-
-const API_BASE_URL = 'http://localhost:3003/api';
-const API_KEY = 'hello123';
+import { API_BASE_URL, API_KEY } from "../../config/api";
 
 const BlogEditor = () => {
     const { id } = useParams();
