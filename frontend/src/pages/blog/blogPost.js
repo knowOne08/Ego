@@ -9,9 +9,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
-
-const API_BASE_URL = 'http://localhost:3003/api';
-const API_KEY = 'hello123';
+import { API_BASE_URL, API_KEY } from "../../config/api";
 
 // Custom sanitize schema to allow GitBook HTML elements
 const customSanitizeSchema = {

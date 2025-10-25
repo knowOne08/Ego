@@ -3,9 +3,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { meta } from "../../content_option";
 import "./style.css";
 import { Container, Row, Col } from "react-bootstrap";
-
-const API_BASE_URL = 'http://localhost:3003/api';
-const API_KEY = 'hello123';
+import { API_BASE_URL, API_KEY } from "../../config/api";
 
 export const Blog = () => {
     const [selectedTag, setSelectedTag] = useState("All");

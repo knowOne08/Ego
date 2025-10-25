@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
-
-const API_BASE_URL = 'http://localhost:3003/api';
-const API_KEY = 'hello123'; // In production, this should be in environment variables
+import { API_BASE_URL, API_KEY } from "../../config/api";
 
 const AdminDashboard = () => {
     const [blogs, setBlogs] = useState([]);

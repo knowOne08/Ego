@@ -27,8 +27,10 @@ app.use(helmet());
 const allowedOrigins = [
   'http://localhost:3000', 
   'http://localhost:3001',
-  'https://your-vercel-app.vercel.app', // Replace with your actual Vercel domain
-  'https://ego-frontend.vercel.app', // Example - replace with your actual domain
+  'https://yashbuilds.com',
+  'https://ego-zeta.vercel.app/'
+   // Replace with your actual Vercel domain
+  // Add more domains if needed
 ];
 
 app.use(cors({
@@ -39,6 +41,7 @@ app.use(cors({
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
+      console.log('CORS blocked origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
