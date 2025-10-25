@@ -28,9 +28,9 @@ const allowedOrigins = [
   'http://localhost:3000', 
   'http://localhost:3001',
   'https://yashbuilds.com',
-  'https://ego-zeta.vercel.app/'
-   // Replace with your actual Vercel domain
-  // Add more domains if needed
+  'https://ego-zeta.vercel.app',
+  'https://ego-zeta.vercel.app/',
+  // Add your actual Vercel domain here if different
 ];
 
 app.use(cors({
@@ -38,6 +38,7 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
+    console.log('CORS check for origin:', origin);
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -84,6 +85,6 @@ app.use('/api/blogs', router);
 app.use('/api/admin', validateApiKey);
 app.use('/api/admin', router);
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0' , () => {
   console.log(`Server is running on port ${port}`);
 });
