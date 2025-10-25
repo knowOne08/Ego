@@ -1,4 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
@@ -120,6 +124,69 @@ export class SupabaseDB {
         const { error } = await supabase.storage
             .from('blog-images')
             .remove([imagePath]);
+        
+        if (error) throw error;
+        return true;
+    }
+
+    // Get all pages for a blog
+    static async getBlogPages(blogId) {
+        const { data, error } = await supabase
+            .from('blog_pages')
+            .select('*')
+            .eq('blog_id', blogId)
+            .order('page_order', { ascending: true });
+        
+        if (error) throw error;
+        return data;
+    }
+
+    // Get a specific page by slug
+    static async getPageBySlug(blogId, pageSlug) {
+        const { data, error } = await supabase
+            .from('blog_pages')
+            .select('*')
+            .eq('blog_id', blogId)
+            .eq('slug', pageSlug)
+            .single();
+        
+        if (error) throw error;
+        return data;
+    }
+
+    // Get page navigation (previous/next pages within a blog)
+    static async getPageNavigation(blogId, currentPageOrder) {
+        const pages = await this.getBlogPages(blogId);
+        
+        const currentIndex = pages.findIndex(p => p.page_order === currentPageOrder);
+        
+        return {
+            previous: currentIndex > 0 ? pages[currentIndex - 1] : null,
+            next: currentIndex < pages.length - 1 ? pages[currentIndex + 1] : null
+        };
+    }
+
+    // Create or update a blog page
+    static async upsertBlogPage(pageData) {
+        const { data, error } = await supabase
+            .from('blog_pages')
+            .upsert([pageData], {
+                onConflict: 'blog_id,slug'
+            })
+            .select()
+            .single();
+        
+        if (error) throw error;
+        return data;
+    }
+
+    // Delete a blog page
+    static async deleteBlogPage(blogId, slug) {
+        const { error } = await supabase
+            .from('blog_pages')
+            .delete()
+            .eq('blog_id', blogId)
+            .eq('slug', slug);
         
         if (error) throw error;
         return true;

@@ -1,0 +1,43 @@
+name: Sync GitBook Blogs to Supabase
+
+on:
+  push:
+    branches: [ main, master ]
+    paths: 
+      - 'blogs/**'  # Only trigger when blog content changes
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  sync-blogs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 2  # Get previous commit for comparison
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install dependencies
+      run: |
+        npm init -y
+        npm install @supabase/supabase-js marked front-matter glob
+
+    - name: Sync blogs to Supabase
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+      run: node .github/scripts/sync-blogs.js
+
+    - name: Generate blog summary
+      run: |
+        echo "## Blog Sync Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- Repository: ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Timestamp: $(date)" >> $GITHUB_STEP_SUMMARY
