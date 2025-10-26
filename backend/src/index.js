@@ -28,9 +28,10 @@ const allowedOrigins = [
   'http://localhost:3000', 
   'http://localhost:3001',
   'https://yashbuilds.com',
+  'https://www.yashbuilds.com',
   'https://ego-zeta.vercel.app',
-  'https://ego-zeta.vercel.app/',
-  // Add your actual Vercel domain here if different
+  'https://ego-qocqpothv-knowone08s-projects.vercel.app',
+  // Add any other Vercel preview domains as needed
 ];
 
 app.use(cors({

@@ -5,8 +5,8 @@ const getApiBaseUrl = () => {
     return 'http://localhost:3003/api';
   }
   
-  // Production URL - replace with your Oracle server IP or domain
-  return process.env.REACT_APP_API_URL || 'http://YOUR_ORACLE_SERVER_IP:3003/api';
+  // Production URL - using custom domain
+  return process.env.REACT_APP_API_URL || 'https://api.yashbuilds.com/api';
 };
 
 export const API_BASE_URL = getApiBaseUrl();
