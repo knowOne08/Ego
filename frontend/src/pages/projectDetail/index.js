@@ -13,6 +13,7 @@ export const ProjectDetail = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const [currentTheme, setCurrentTheme] = useState(localStorage.getItem("theme") || "dark");
+  const [isMobile, setIsMobile] = useState(false);
   const heroRef = useRef(null);
 
   useEffect(() => {
@@ -22,10 +23,28 @@ export const ProjectDetail = () => {
     
     if (foundProject) {
       setProject(foundProject);
+      
+      // For mobile devices, ensure we start at the top
+      if (window.innerWidth <= 768) {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        // Force scroll to top after a brief delay to handle viewport changes
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'auto' }), 50);
+      }
+      
       setTimeout(() => setIsLoaded(true), 300);
     } else {
       navigate('/portfolio');
     }
+
+    // Mobile detection
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
   }, [projectId, navigate]);
 
   useEffect(() => {
@@ -72,7 +91,8 @@ export const ProjectDetail = () => {
       // Hide scroll indicator after scrolling 100px
       setShowScrollIndicator(scrolled < 100);
       
-      if (heroRef.current) {
+      // Only apply parallax on desktop to avoid mobile performance issues
+      if (!isMobile && heroRef.current) {
         const parallax = heroRef.current.querySelector('.hero-bg');
         if (parallax) {
           parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
@@ -80,9 +100,23 @@ export const ProjectDetail = () => {
       }
     };
 
+    // Prevent initial scroll on mobile - ensure we start at top
+    if (isMobile) {
+      window.scrollTo(0, 0);
+      
+      // Add a small delay to ensure DOM is ready and prevent viewport changes from causing scroll
+      const preventInitialScroll = () => {
+        window.scrollTo(0, 0);
+      };
+      
+      setTimeout(preventInitialScroll, 100);
+      setTimeout(preventInitialScroll, 300);
+      setTimeout(preventInitialScroll, 500);
+    }
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isMobile]);
 
   if (!project) {
     return (

@@ -40,8 +40,15 @@
 .pcb-viewer-container canvas {
   width: 100% !important;
   height: 100% !important;
-  opacity: 0.7;
-  filter: brightness(0.8);
+  opacity: 0.9;
+  filter: brightness(1.1);
+  /* Prevent canvas from interfering with mobile scrolling */
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /* Dark mode adjustments */
@@ -52,7 +59,7 @@
   }
 
   .pcb-viewer-container canvas {
-    filter: brightness(0.6);
+    filter: brightness(1.0);
   }
 }
 
@@ -64,8 +71,8 @@
   }
 
   .pcb-viewer-container canvas {
-    filter: brightness(0.4) contrast(2.5) saturate(1.8) drop-shadow(0 0 10px rgba(0,0,0,0.8));
-    background: radial-gradient(circle at center, rgba(0,0,0,0.2), rgba(0,0,0,0.1)) !important;
+    filter: brightness(0.7) contrast(2.2) saturate(1.6) drop-shadow(0 0 8px rgba(0,0,0,0.6));
+    background: radial-gradient(circle at center, rgba(0,0,0,0.15), rgba(0,0,0,0.05)) !important;
   }
   
   .pcb-viewer-container {
@@ -84,5 +91,37 @@
     background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.1) 80%);
     pointer-events: none;
     z-index: 1;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  .pcb-viewer-container {
+    /* Reduce GPU load on mobile devices */
+    transform: translateZ(0);
+    will-change: auto;
+  }
+  
+  .pcb-viewer-container canvas {
+    /* Optimize for mobile performance */
+    image-rendering: optimizeSpeed;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    opacity: 0.6;
+    /* Ensure no touch events interfere with scrolling */
+    pointer-events: none !important;
+    touch-action: none !important;
+  }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .pcb-viewer-container {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
   }
 }

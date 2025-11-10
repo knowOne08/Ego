@@ -292,7 +292,7 @@
 .back-button {
     background: transparent;
     border: none;
-    color: var(--text-color);
+    color: var(--text-color-3); /* Changed from var(--text-color) to primary pink */
     padding: 0;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -307,7 +307,7 @@
 }
 
 .back-button:hover {
-    color: var(--text-color);
+    color: var(--text-color-3); /* Changed from var(--text-color) to maintain pink on hover */
     opacity: 0.7;
     transform: translateX(-4px);
 }
