@@ -4,6 +4,14 @@
     box-sizing: border-box;
 }
 
+/* iOS Safari viewport fix */
+@supports (-webkit-touch-callout: none) {
+    .hero-cinematic {
+        height: -webkit-fill-available;
+        min-height: 100vh;
+    }
+}
+
 .project-detail-artistry {
     min-height: 100vh;
     color: var(--text-color);
@@ -11,6 +19,8 @@
     overflow-x: hidden;
     opacity: 0;
     transition: opacity 1s ease;
+    /* Prevent scroll restoration issues on mobile */
+    scroll-behavior: smooth;
 }
 
 .project-detail-artistry.loaded {
@@ -79,6 +89,7 @@
 .hero-cinematic {
     position: relative;
     height: 100vh;
+    height: 100dvh; /* Use dynamic viewport height for better mobile support */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -439,6 +450,13 @@
     opacity: 0.5;
     pointer-events: none;
     overflow: hidden;
+    /* Prevent touch events from interfering with scrolling */
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .visual-container {
@@ -1741,7 +1759,11 @@
     }
     
     .hero-cinematic {
-        height: 80vh;
+        height: 100vh;
+        height: 100dvh; /* Use dynamic viewport height */
+        min-height: 600px; /* Minimum height to prevent too-small screens */
+        max-height: 100vh; /* Fallback for browsers that don't support dvh */
+        touch-action: pan-y; /* Allow only vertical scrolling */
     }
     
     /* Remove background image on small screens */
@@ -1803,6 +1825,15 @@
         letter-spacing: 1.5px;
     }
     
+    /* Center the scroll indicator on mobile */
+    .hero-scroll-indicator {
+        transform: translateY(0) translateX(0) !important; /* Remove horizontal offset */
+    }
+    
+    .hero-scroll-indicator.hidden {
+        transform: translateY(30px) translateX(0) !important; /* Keep centered when hidden */
+    }
+    
     .components-artistic {
         grid-template-columns: 1fr;
     }
@@ -1828,6 +1859,14 @@
         background: var(--primary-color) !important;
     }
     
+    .hero-cinematic {
+        height: 100vh;
+        height: 100dvh; /* Use dynamic viewport height */
+        min-height: 500px; /* Ensure minimum height on very small screens */
+        max-height: 100vh; /* Fallback */
+        touch-action: pan-y; /* Only allow vertical scrolling */
+    }
+    
     .hero-content {
         padding: 0 0.5rem;
     }
@@ -1850,6 +1889,11 @@
     
     .hero-scroll-indicator {
         bottom: 1.5rem;
+        transform: translateY(0) translateX(0) !important; /* Center on very small screens */
+    }
+    
+    .hero-scroll-indicator.hidden {
+        transform: translateY(30px) translateX(0) !important; /* Keep centered when hidden */
     }
     
     .scroll-line {

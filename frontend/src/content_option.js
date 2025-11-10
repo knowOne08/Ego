@@ -22,7 +22,7 @@ const introdata = {
         second: "Rockets",
         third: "Computers",
     },
-    description: "Just a bag of particles finding the meaning of it all",
+    description: "A bag of mindless particles creating a mindful experince",
     your_img_url: FallenImage,
 };
 
@@ -248,7 +248,7 @@ const dataportfolio = [
         category: "Aerospace",
         technologies: ["ESP8266", "BMP280", "C++", "PCB Design"],
         isMainProject: true,
-        modelPath: "/models/C6.glb", // ← Using existing model for testing
+        modelPath: "", // ← Using existing model for testing
         duration: "2 months",
         teamSize: "Solo",
         problem: "Ananta rocket team needed a reliable flight computer for their model rockets to track altitude, detect apogee, and deploy recovery systems. Commercial options were expensive and not customizable for our specific requirements.",
@@ -285,21 +285,21 @@ const dataportfolio = [
     },
     {
         title: "Atom",
-        description: "General-purpose flight computer for medium/high-altitude experimental rockets. Doubles as a dev board with IMU & pressure sensor. Funded by SSIP (₹54,000).",
+        description: "General-purpose flight computer for medium/high-altitude experimental rockets. Doubles as a dev board with IMU & pressure sensor. Funded by SSIP",
         link: "https://x.com/know_one08/status/1875271426426745305",
         category: "Aerospace",
         technologies: ["Flight Computer", "IMU", "Pressure Sensor"],
-        funding: "SSIP (₹54,000)",
+        funding: "SSIP",
         isMainProject: true
     },
     {
         title: "C6",
-        description: "Advanced flight computer with redundant sensors (2 IMUs, 2 pressure sensors, 4 pyro channels). COTS-grade design. Funded by BagelFund ($490).",
+        description: "Advanced flight computer with redundant sensors (2 IMUs, 2 pressure sensors, 4 pyro channels). COTS-grade design. Funded by BagelFund.",
         link: "https://github.com/knowOne08/C6",
         github: "https://github.com/knowOne08/C6",
         category: "Aerospace",
         technologies: ["Redundant Sensors", "COTS Design", "Pyro Channels", "ESP32", "IMU", "BMP388"],
-        funding: "BagelFund ($490)",
+        funding: "BagelFund",
         modelPath: "/models/C6.glb",
         isMainProject: true,
         duration: "4 months",

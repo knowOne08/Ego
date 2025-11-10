@@ -28,9 +28,10 @@ const allowedOrigins = [
   'http://localhost:3000', 
   'http://localhost:3001',
   'https://yashbuilds.com',
+  'https://www.yashbuilds.com',
   'https://ego-zeta.vercel.app',
-  'https://ego-zeta.vercel.app/',
-  // Add your actual Vercel domain here if different
+  'https://ego-qocqpothv-knowone08s-projects.vercel.app',
+  // Add any other Vercel preview domains as needed
 ];
 
 app.use(cors({
@@ -38,7 +39,7 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    console.log('CORS check for origin:', origin);
+    // console.log('CORS check for origin:', origin);
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {

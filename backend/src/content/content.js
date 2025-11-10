@@ -22,7 +22,7 @@ const introdata = {
         second: "Rockets",
         third: "Computers",
     },
-    description: "Just a bag of particles finding the meaning of it all",
+    description: "A bag of mindless particles creating a mindful experince",
     your_img_url: FallenImage,
 };
 

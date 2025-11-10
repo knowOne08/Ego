@@ -79,12 +79,12 @@ export const BlogPost = () => {
             
             // Create audio element
             const audio = new Audio('/audio/space-odyssey.mp3');
-            audio.volume = 0.8; // Max volume - audio file has built-in fade
+            audio.volume = 1; // Max volume - audio file has built-in fade
             audio.preload = 'auto';
             
             // Start at a specific time (in seconds)
             audio.currentTime = 0; // Change this to start at different point (e.g., 5 for 5 seconds in)
-            
+           
             console.log('🎵 Audio object created:', audio.src);
             console.log('⏱️  Starting at:', audio.currentTime, 'seconds');
             
@@ -397,14 +397,6 @@ export const BlogPost = () => {
     if (loading) {
         return (
             <>
-                {/* Show overlay during loading if switching from dark mode */}
-                {showLightModeOverlay && (
-                    <div className="light-mode-overlay">
-                        <div className="light-mode-message">
-                            Switching to light mode for better reading...
-                        </div>
-                    </div>
-                )}
                 <Container className="blog-post-container">
                     <div className="blog-loading" style={{ opacity: showLightModeOverlay ? 0 : 1 }}>
                         <div className="loading-spinner"></div>

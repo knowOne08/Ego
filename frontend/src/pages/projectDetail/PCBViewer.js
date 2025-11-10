@@ -37,41 +37,44 @@ function RotatingModel({ modelPath }) {
             child.material = child.material.clone();
             
             if (!isDarkMode) {
-              // Light mode adjustments - make model much darker and sharper
+              // Light mode adjustments - make model darker but more visible
               if (child.material.color) {
-                child.material.color.multiplyScalar(0.15); // Much darker - 85% reduction
+                child.material.color.multiplyScalar(0.25); // Less reduction - was 0.15, now 0.25
               }
               if (child.material.emissive) {
-                child.material.emissive.multiplyScalar(0.1);
+                child.material.emissive.multiplyScalar(0.3); // Increase emissive - was 0.1, now 0.3
               }
               
               // Increase metalness and roughness for better contrast
               if (child.material.metalness !== undefined) {
-                child.material.metalness = Math.min(child.material.metalness + 0.4, 1.0);
+                child.material.metalness = Math.min(child.material.metalness + 0.2, 1.0); // Reduced from 0.4
               }
               if (child.material.roughness !== undefined) {
-                child.material.roughness = Math.max(child.material.roughness - 0.3, 0.1);
+                child.material.roughness = Math.max(child.material.roughness - 0.3, 0.2); // Less smooth
               }
               
               // Add edge enhancement
               child.material.transparent = true;
-              child.material.opacity = 0.95;
+              child.material.opacity = 1.0; // Full opacity - was 0.95
               
               // Force flat shading for sharper edges
               child.material.flatShading = true;
               
             } else {
-              // Dark mode adjustments - enhance glow and brightness
+              // Dark mode adjustments - make much brighter and more visible
               if (child.material.color) {
-                child.material.color.multiplyScalar(1.4); // Brighter
+                child.material.color.multiplyScalar(2.2); // Much brighter - was 1.4, now 2.2
               }
               if (child.material.emissive) {
-                child.material.emissive.multiplyScalar(1.2);
+                child.material.emissive.multiplyScalar(1.8); // Stronger glow - was 1.2, now 1.8
               }
               
               // Enhance metallic look in dark mode
               if (child.material.metalness !== undefined) {
-                child.material.metalness = Math.min(child.material.metalness + 0.2, 1.0);
+                child.material.metalness = Math.min(child.material.metalness + 0.4, 1.0); // Increased from 0.2
+              }
+              if (child.material.roughness !== undefined) {
+                child.material.roughness = Math.max(child.material.roughness - 0.2, 0.1); // Add some shine
               }
             }
             child.material.needsUpdate = true;
@@ -185,15 +188,15 @@ export default function PCBViewer({ modelPath, gifPath }) {
   
   // Theme-aware lighting settings
   const lightingConfig = isDarkMode ? {
-    ambientIntensity: 0.4,
-    directional1Intensity: 1.0,
-    directional2Intensity: 0.6,
+    ambientIntensity: 0.6, // Increased from 0.4
+    directional1Intensity: 1.5, // Increased from 1.0
+    directional2Intensity: 1.0, // Increased from 0.6
     directional1Position: [5, 5, 5],
     directional2Position: [-5, -5, -5]
   } : {
-    ambientIntensity: 0.1,  // Very low ambient for sharp contrast
-    directional1Intensity: 2.5,  // Much stronger key light
-    directional2Intensity: 1.5,  // Strong fill light
+    ambientIntensity: 0.2,  // Increased from 0.1 for better base visibility
+    directional1Intensity: 3.0,  // Increased from 2.5
+    directional2Intensity: 2.0,  // Increased from 1.5
     directional1Position: [15, 15, 10],  // High angle key light
     directional2Position: [-10, -10, -8]  // Opposing fill light
   };
@@ -226,20 +229,20 @@ export default function PCBViewer({ modelPath, gifPath }) {
             <>
               <directionalLight 
                 position={[0, -15, 8]} 
-                intensity={1.2}
-                color="#222222"
+                intensity={1.8} // Increased from 1.2
+                color="#444444" // Brighter color - was #222222
               />
               <directionalLight 
                 position={[20, 0, 0]} 
-                intensity={0.8}
-                color="#333333"
+                intensity={1.2} // Increased from 0.8
+                color="#555555" // Brighter color - was #333333
               />
               <spotLight
                 position={[0, 20, 10]}
                 angle={0.3}
                 penumbra={0.1}
-                intensity={1.5}
-                color="#444444"
+                intensity={2.0} // Increased from 1.5
+                color="#666666" // Brighter color - was #444444
                 castShadow
               />
             </>
