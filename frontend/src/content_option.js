@@ -172,60 +172,118 @@ Thy proud heart's slave and vassal wretch to be.
 ]
 const paintings = [{
         img: Image2,
-        description: "School of Athens",
+        description: "The School of Athens",
         link: "art_gallery/school_of_athens",
-        artist: 'Raphael'
+        artist: 'Raphael',
+        year: '1509-1511',
+        medium: 'Fresco',
+        dimensions: '500 cm × 770 cm',
+        location: 'Apostolic Palace, Vatican City',
+        story: 'One of the most famous frescoes by Raphael, painted during the High Renaissance. It depicts the greatest mathematicians, philosophers and scientists from classical antiquity gathered together sharing their ideas. The central figures are Plato and Aristotle.',
+        interpretation: 'The composition reveals Raphael\'s vision of intellectual harmony. Plato points upward to the realm of ideas while Aristotle gestures horizontally toward the empirical world. The architectural perspective draws our eyes to this philosophical dialogue at the center, suggesting that all human knowledge stems from the tension between idealism and realism. The scattered scrolls and instruments represent the tools of learning, while the diverse gathering shows that wisdom transcends cultural boundaries.',
+        significance: 'This masterpiece represents the marriage of art, philosophy, and science during the Renaissance, embodying the humanist ideals of the period.'
     },
     {
         img: Image1,
         description: "American Gothic",
         link: "art_gallery/american_gothic",
-        artist: 'Grant Wood'
+        artist: 'Grant Wood',
+        year: '1930',
+        medium: 'Oil on canvas',
+        dimensions: '78 cm × 65.3 cm',
+        location: 'Art Institute of Chicago',
+        story: 'This iconic painting depicts a farmer and his daughter standing before a Gothic Revival style house. Wood modeled the house after a real house in Eldon, Iowa, and the figures after his sister Nan Wood Graham and his dentist.',
+        interpretation: 'The rigid postures and stern expressions reflect the stoic determination of rural America. The Gothic window behind them creates a religious undertone, suggesting these are people of faith and tradition. The man\'s pitchfork echoes the window\'s vertical lines, symbolizing his connection to both the land and moral uprightness. The woman\'s gaze, slightly averted, hints at suppressed desires or dreams beyond this austere existence.',
+        significance: 'A defining image of 20th-century American art, representing the steadfast American pioneer spirit and rural values during the Great Depression.'
     },
     {
         img: Image3,
         description: "Nighthawks",
         link: "art_gallery/nighthawks",
-        artist: "Edward Hopper"
-
+        artist: "Edward Hopper",
+        year: '1942',
+        medium: 'Oil on canvas',
+        dimensions: '84.1 cm × 152.4 cm',
+        location: 'Art Institute of Chicago',
+        story: 'Perhaps the most famous painting in American art, it depicts people in a downtown diner late at night. The scene is thought to be based on a diner in Greenwich Village.',
+        interpretation: 'The harsh fluorescent light creates a fishbowl effect, isolating the figures within while making them visible to the outside world. The empty street and stark lighting emphasize urban alienation. Each figure appears lost in their own thoughts despite their proximity, reflecting the paradox of loneliness in crowded city life.',
+        significance: 'This painting captures the isolation and loneliness of modern urban life, becoming an enduring symbol of 20th-century American culture.'
     },
     {
         img: Image4,
         description: "The Death of Socrates",
         link: "art_gallery/death_of_socrates",
-        artist: "Jacques-Louis David"
+        artist: "Jacques-Louis David",
+        year: '1787',
+        medium: 'Oil on canvas',
+        dimensions: '129.5 cm × 196.2 cm',
+        location: 'Metropolitan Museum of Art, New York',
+        story: 'This painting depicts the ancient Greek philosopher Socrates moments before drinking hemlock poison as ordered by the Athenian court. Socrates chose death over renouncing his beliefs.',
+        interpretation: 'David presents Socrates as a martyr for truth, his calm demeanor contrasting with his disciples\' emotional responses. The philosopher\'s upward-pointing finger suggests his belief in higher truths, while his steady gaze shows unwavering conviction. The composition emphasizes duty to principle over preservation of life.',
+        significance: 'A powerful example of Neoclassical art that exemplifies moral virtue and the triumph of philosophy over death.'
     },
     {
         img: Image5,
         description: "Girl with a Pearl Earring",
         link: "art_gallery/girl_with_a_pearl_earing",
-        artist: "Johannes Vermeer"
+        artist: "Johannes Vermeer",
+        year: 'c. 1665',
+        medium: 'Oil on canvas',
+        dimensions: '44.5 cm × 39 cm',
+        location: 'Mauritshuis, The Hague',
+        story: 'Often called the "Mona Lisa of the North," this painting features a mysterious girl with an exotic pearl earring looking over her shoulder. The subject\'s identity remains unknown.',
+        interpretation: 'The girl\'s direct gaze creates an intimate connection with the viewer, as if caught in a moment of recognition. The exotic turban and luminous pearl suggest foreignness and luxury, while her parted lips hint at unspoken words. The dark background focuses all attention on her luminous face, making her presence both immediate and eternal.',
+        significance: 'A masterpiece of the Dutch Golden Age, renowned for its intimate atmosphere and the girl\'s enigmatic gaze.'
     },
     {
         img: Image8,
         description: "Echo and Narcissus",
         link: "art_gallery/echo_and_narcissus",
-        artist: "John William Waterhouse"
+        artist: "John William Waterhouse",
+        year: '1903',
+        medium: 'Oil on canvas',
+        dimensions: '109.2 cm × 189.2 cm',
+        location: 'Walker Art Gallery, Liverpool',
+        story: 'Based on Ovid\'s Metamorphoses, this painting tells the tragic story of Echo, who was cursed to only repeat others\' words, and Narcissus, who fell in love with his own reflection.',
+        interpretation: 'The composition mirrors the myth\'s theme of reflection and repetition. Echo\'s reaching gesture toward the oblivious Narcissus captures the pain of unrequited love, while his absorption with his reflection symbolizes dangerous self-obsession. The lush natural setting represents both beauty and the trap of illusion.',
+        significance: 'A prime example of Pre-Raphaelite art, combining classical mythology with romantic imagery and symbolic meaning.'
     },
-    
     {
         img: Image6,
-        description: "The Van Gogh",
+        description: "Portrait of Van Gogh",
         link: "art_gallery/the_van_gogh",
-        artist: "John Russell"
+        artist: "John Russell",
+        year: '1886',
+        medium: 'Oil on canvas',
+        dimensions: '60 cm × 45 cm',
+        location: 'Van Gogh Museum, Amsterdam',
+        story: 'This portrait was painted by John Russell, a friend of Van Gogh, during their time in Paris. It captures Van Gogh in his artistic prime.',
+        significance: 'One of the few portraits of Van Gogh painted by a contemporary, offering insight into how his peers viewed the revolutionary artist.'
     },
-    
     {
         img: Image7,
-        description: "Starry Nights",
+        description: "The Starry Night",
         link: "art_gallery/starry_nights",
-        artist: "Van Gogh"
+        artist: "Vincent van Gogh",
+        year: '1889',
+        medium: 'Oil on canvas',
+        dimensions: '73.7 cm × 92.1 cm',
+        location: 'Museum of Modern Art, New York',
+        story: 'Painted during Van Gogh\'s time at the asylum in Saint-Rémy-de-Provence, this depicts the view from his window at night, enhanced by his imagination and memory.',
+        interpretation: 'The swirling sky represents Van Gogh\'s turbulent mental state, yet also suggests cosmic energy and movement. The cypress tree, like a dark flame, connects earth and sky, symbolizing the artist\'s desire to bridge the material and spiritual worlds. The small village below remains peaceful and grounded, perhaps representing the stability he yearned for. The contrast between the dynamic sky and still earth reflects his internal struggle between chaos and calm.',
+        significance: 'One of the most recognizable paintings in the world, representing Van Gogh\'s unique post-impressionist style and emotional intensity.'
     },
     {
         img: Image9,
         description: "The Persistence of Memory",
         link: "art_gallery/persistence_of_memory",
-        artist: "Salvador Dalí"
+        artist: "Salvador Dalí",
+        year: '1931',
+        medium: 'Oil on canvas',
+        dimensions: '24 cm × 33 cm',
+        location: 'Museum of Modern Art, New York',
+        story: 'This surrealist masterpiece features melting clocks in a dreamscape setting, inspired by Dalí\'s meditation on the relativity of time and his observation of melted Camembert cheese.',
+        significance: 'An icon of Surrealism that challenges our perception of time and reality, demonstrating the movement\'s exploration of the unconscious mind.'
     },
 ];
 

@@ -2,6 +2,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async"
 import { meta, paintings } from "../../content_option"
 import "./style.css";
 import { Col, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 export const ArtGallery = () => {
 
     return (
@@ -25,7 +26,7 @@ export const ArtGallery = () => {
                     <p className="name">{data.description}</p>
                     <p className="artist">by {data.artist}</p>
                    </div>
-                    <a href={data.link}>Learn More</a>
+                    <Link to={`/${data.link}`}>Learn More</Link>
                 </div>
               </div>
             );
