@@ -55,29 +55,33 @@
 
 .artwork-frame {
     margin-bottom: 3rem;
-    max-width: 90%;
-    max-height: 70vh;
+    max-width: 80%;
     background: var(--secondary-color);
     padding: 3rem;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-block;
+    position: relative;
+    /* Create consistent frame sizing */
 }
 
 .artwork-image {
-    max-width: 100%;
-    max-height: 100%;
-    height: auto;
-    width: auto;
-    object-fit: contain;
     display: block;
+    max-width: 600px;
+    max-height: 500px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 1px;
+    margin: 0 auto;
 }
 
 .artwork-info {
     text-align: center;
     max-width: 800px;
+    width: 100%; /* Ensure full width for proper centering */
+    margin: 0 auto; /* Center the content */
+    padding: 0 1rem; /* Add some padding for mobile */
 }
 
 .title {
@@ -85,8 +89,10 @@
     font-size: 3rem;
     font-weight: 300;
     color: var(--text-color);
-    margin: 0 0 0.5rem 0;
+    margin: 0 auto 0.5rem auto;
     line-height: 1.2;
+    text-align: center;
+    width: 100%;
 }
 
 .artist {
@@ -94,8 +100,25 @@
     font-size: 1.2rem;
     color: var(--text-color);
     opacity: 0.7;
-    margin: 0;
+    margin: 0 auto;
     font-style: italic;
+    text-align: center;
+    width: 100%;
+}
+
+/* Image fallback styles */
+.image-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+    border-radius: 8px;
+    border: 2px dashed #ccc;
+}
+
+.image-fallback svg {
+    opacity: 0.7;
 }
 
 /* Information Section */
@@ -145,6 +168,146 @@
     font-weight: 600;
 }
 
+/* Download Button Styles */
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    margin-top: 1.5rem;
+    background: rgba(var(--text-color-rgb), 0.1);
+    border: 1px solid rgba(var(--text-color-rgb), 0.2);
+    border-radius: 6px;
+    color: var(--text-color);
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    backdrop-filter: blur(10px);
+    position: relative;
+}
+
+.download-btn:hover {
+    background: rgba(var(--text-color-rgb), 0.15);
+    border-color: rgba(var(--text-color-rgb), 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.download-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.download-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.download-btn:hover svg {
+    transform: translateY(1px);
+}
+
+.download-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.download-btn:disabled:hover {
+    background: rgba(var(--text-color-rgb), 0.1);
+    transform: none;
+    box-shadow: none;
+}
+
+/* Download button loading state */
+.download-btn.downloading {
+    background: rgba(var(--text-color-rgb), 0.2);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.download-btn .loading-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Extra small screen styles for download button */
+@media (max-width: 576px) {
+    .download-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        margin-top: 0.75rem;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .download-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* Tooltip for download button */
+.download-btn:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    animation: fadeInTooltip 0.3s ease forwards;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.download-btn:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 112%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    animation: fadeInTooltip 0.3s ease forwards;
+    z-index: 1000;
+}
+
+@keyframes fadeInTooltip {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Disable tooltip on mobile */
+@media (max-width: 768px) {
+    .download-btn:hover::after,
+    .download-btn:hover::before {
+        display: none;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 991px) {
     .art-detail-header {
@@ -157,7 +320,12 @@
     
     .artwork-frame {
         padding: 2rem;
-        max-height: 60vh;
+        max-width: 85%;
+    }
+    
+    .artwork-image {
+        max-width: 500px;
+        max-height: 400px;
     }
     
     .title {
@@ -186,7 +354,12 @@
     
     .artwork-frame {
         padding: 1.5rem;
-        max-height: 50vh;
+        max-width: 90%;
+    }
+    
+    .artwork-image {
+        max-width: 400px;
+        max-height: 350px;
     }
     
     .title {
@@ -208,6 +381,17 @@
     .info-block h3 {
         font-size: 1.3rem;
     }
+    
+    .download-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+        margin-top: 1rem;
+    }
+    
+    .download-btn svg {
+        width: 18px;
+        height: 18px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -222,6 +406,12 @@
     .artwork-frame {
         padding: 1rem;
         margin-bottom: 2rem;
+        max-width: 95%;
+    }
+    
+    .artwork-image {
+        max-width: 300px;
+        max-height: 280px;
     }
     
     .info-block {
@@ -238,15 +428,71 @@
     }
 }
 
+/* Download Section at Bottom */
+.download-section {
+    padding: 3rem 2rem 4rem;
+    background: rgba(var(--primary-color-rgb), 0.1);
+    border-top: 1px solid rgba(var(--text-color), 0.1);
+    margin-top: 2rem;
+}
+
+.download-section .download-btn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    min-width: 280px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(0);
+    transition: all 0.3s ease;
+}
+
+.download-section .download-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile adjustments for download section */
+@media (max-width: 768px) {
+    .download-section {
+        padding: 2rem 1rem 3rem;
+    }
+    
+    .download-section .download-btn {
+        min-width: 240px;
+        font-size: 1rem;
+        padding: 0.9rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .download-section .download-btn {
+        min-width: 200px;
+        font-size: 0.95rem;
+        padding: 0.8rem 1.2rem;
+    }
+}
+
 /* Light theme adjustments */
 [data-theme="light"] .artwork-frame {
-    background: #ffffff;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    background: #f8f9fa;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(0, 0, 0, 0.05),
+        inset 0 0 0 1px rgba(0, 0, 0, 0.02);
+    border: 2px solid #e9ecef;
 }
 
 [data-theme="light"] .info-block {
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(248, 249, 250, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .info-block h3 {
+    color: #495057;
+}
+
+[data-theme="light"] .details-section {
+    background: rgba(248, 249, 250, 0.3);
 }
 
 /* Subtle fade-in animation */
@@ -440,6 +686,28 @@
 
 [data-theme="light"] .masterpiece-image {
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .art-detail-header {
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .back-to-gallery {
+    color: #495057;
+}
+
+[data-theme="light"] .back-to-gallery:hover {
+    color: var(--text-color-3);
+    border-color: var(--text-color-3);
+}
+
+[data-theme="light"] .title {
+    color: #212529;
+}
+
+[data-theme="light"] .artist {
+    color: #6c757d;
 }
 
 .gallery-footer {

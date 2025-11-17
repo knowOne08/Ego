@@ -1,0 +1,155 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
+
+.po_items_ho {
+    column-width: 15em;
+    -moz-column-width: 15em;
+    -webkit-column-width: 35rem;
+    column-gap: 4rem;
+    -moz-column-gap: 4rem;
+    -webkit-column-gap: 4rem;
+    /* margin: 60px; */
+
+    @media (min-width: 768px) {
+        margin-left: 60px;
+        margin-right: 30px;
+        margin-top:10px ;
+      }
+      
+}
+
+.po_item {
+    display: inline-flex;
+    width: 100%;
+    text-align: center;
+    margin: 0.5rem auto;
+    position: relative;
+    background: var(--secondary-color);
+    padding: 4px;
+    border: 1px solid var(--secondary-color);
+    transition: 0.5s ease;
+    font-size: 0;
+    min-height: 200px;
+
+    @media only screen and (max-width: 767px) { 
+        padding: 0;
+    }
+}
+
+.po_item img {
+    max-width: 100%;
+}
+
+.po_item .content {
+    position: absolute;
+    height: 0;
+    width: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--overlay-color);
+    /* z-index: 1; */
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    transition: 0.3s ease-in-out;
+    opacity: 0;
+    border: 1px solid black;
+}
+
+.po_item .content {
+    opacity: 0;
+    transition-delay: 1s;
+    transition: 0.3s ease;
+    font-size: 17px;
+}
+
+.po_item:hover {
+    box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.25);
+}
+
+.po_item:hover .content {
+    height: calc(100% - 30px);
+    width: calc(100% - 30px);
+    opacity: 10;
+}
+
+.po_item:hover .content {
+    opacity: 1;
+    color: var(--secondary-color);
+}
+
+.po_item .content a {
+    text-align: center;
+    font-size: 1rem;
+    position: absolute;
+    right: calc(2px + 10px); /* Adjust the right offset as needed */
+    bottom: calc(2px + 10px);
+}
+
+.po_item .content a:hover {
+    text-decoration: none;
+    color: #73acc6
+
+}
+
+.po_item .content .name {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 30px;
+    font-weight: lighter;
+}
+.po_item .content .artist {
+    position: absolute;
+    left: 0;
+    font-weight: 550;
+    font-size: 20px;
+    color: red;
+    white-space: nowrap;
+}
+
+
+.description {
+    position: relative;
+    padding-bottom: 20px;
+    /* padding-right: 10px; */
+}
+
+.artist {
+    position: absolute;
+    left: 0;
+}
+
+.heading {
+    text-align: center;
+    margin: 20px;
+    margin-bottom: 30px;
+}
+
+a {
+    text-decoration: none;
+}
+/* .heading .title {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 40px;
+    color: rgb(255, 55, 55);
+}
+
+.heading .quote {
+    font-size: 20px;
+} */
+
+@media screen and (max-width: 768px) {
+    .po_item .content .artist  {
+        font-size: 14px;
+    }
+
+    .po_item .content .name  {
+        font-size: 20px;
+    }
+
+}

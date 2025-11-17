@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b7098494.css",
+    "main.js": "/static/js/main.00f3363c.js",
+    "static/media/Nighthawks.jpg": "/static/media/Nighthawks.b9a6b430c9f7c9165dc8.jpg",
+    "static/media/TheDeathOfSocrates.jpg": "/static/media/TheDeathOfSocrates.9f7175a97946ba46f8ff.jpg",
+    "static/media/FallenImg.jpeg": "/static/media/FallenImg.e3b70767e9d564e515f1.jpeg",
+    "static/media/ThePersistenceOfMemory.jpg": "/static/media/ThePersistenceOfMemory.41496bc9af4c4bcefa30.jpg",
+    "static/media/StarryNight.jpg": "/static/media/StarryNight.aab0af2c4b24bf57af97.jpg",
+    "static/media/AmericanGothic.jpg": "/static/media/AmericanGothic.10cfad1e60399b85e512.jpg",
+    "static/media/TheSchoolOfAthens.jpg": "/static/media/TheSchoolOfAthens.826971ae8dd424e21a41.jpg",
+    "static/media/GirlWithAPearlEarring.jpg": "/static/media/GirlWithAPearlEarring.010d2f9e843543338bd4.jpg",
+    "static/media/EchoAndNarcissus.jpg": "/static/media/EchoAndNarcissus.9613dcc859b6b6ad1cf6.jpg",
+    "static/media/TheVanGogh.jpg": "/static/media/TheVanGogh.4ce57df911cc3a4a29f3.jpg",
+    "static/media/MonaLisa.jpg": "/static/media/MonaLisa.2f63c82f5d4fa67eac32.jpg",
+    "static/media/WandererAboveSeaFog.jpg": "/static/media/WandererAboveSeaFog.fafaaddb732fabd9f930.jpg",
+    "static/media/CreationOfAdam.jpg": "/static/media/CreationOfAdam.218a13590e8049e7cb5c.jpg",
+    "index.html": "/index.html",
+    "main.b7098494.css.map": "/static/css/main.b7098494.css.map",
+    "main.00f3363c.js.map": "/static/js/main.00f3363c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b7098494.css",
+    "static/js/main.00f3363c.js"
+  ]
+}
