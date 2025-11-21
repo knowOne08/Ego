@@ -12,7 +12,7 @@ import Image9 from "./assets/gallery/ThePersistenceOfMemory.jpg"
 const logotext = "Ephemenral";
 const meta = {
     title: "Ephemeral",
-    description: "I'm Yash Darji, I have the delusion of exitence",
+    description: "I'm yash, I have the delusion of exitence",
 };
 
 const introdata = {
@@ -169,7 +169,373 @@ Thy proud heart's slave and vassal wretch to be.
 वो शायद अब नहीं होंगे!
         `
     },
+    {
+        title: "टूटा पहिया",
+        author: "धर्मवीर भारती",
+        no: 5,
+        aboutAuthor: 'https://en.wikipedia.org/wiki/Dharmvir_Bharati',
+        poem: `
+मैं
+रथ का टूटा हुआ पहिया हूँ
+लेकिन मुझे फेंको मत !
+
+क्या जाने कब
+इस दुरूह चक्रव्यूह में
+अक्षौहिणी सेनाओं को चुनौती देता हुआ
+कोई दुस्साहसी अभिमन्यु आकर घिर जाय !
+
+अपने पक्ष को असत्य जानते हुए भी
+बड़े-बड़े महारथी
+अकेली निहत्थी आवाज़ को
+अपने ब्रह्मास्त्रों से कुचल देना चाहें
+तब मैं
+रथ का टूटा हुआ पहिया
+उसके हाथों में
+ब्रह्मास्त्रों से लोहा ले सकता हूँ !
+मैं रथ का टूटा पहिया हूँ
+
+लेकिन मुझे फेंको मत
+इतिहासों की सामूहिक गति
+सहसा झूठी पड़ जाने पर
+क्या जाने
+सच्चाई टूटे हुए पहियों का आश्रय ले !        
+`
+    },
+    {
+        title: "I Remember a Little Girl...",
+        author: "Carlo Rovelli",
+        no: 6,
+        aboutAuthor: 'https://en.wikipedia.org/wiki/Carlo_Rovelli',
+        poem: `
+        I remember a little girl...
+But how can that be...
+Once I was that little Resi,
+and then one day I became an old woman?
+...If God wills it so, why allow me to see it?
+Why doesn't he hide it from me?
+Everything is a mystery, such a deep mystery...
+I feel the fragility of things in time.
+From the bottom of my heart, I feel we should
+cling to nothing.
+
+Everything slips through our fingers.
+All that we seek to hold on to dissolves.
+Everything vanishes, like mist and dreams...
+Time is a strange thing.
+When we don't need it, it is nothing.
+Then, suddenly, there is nothing else.
+It is everywhere around us. Also within us.
+It seeps into our faces.
+
+It seeps into the mirror, runs through my temples...
+Between you and I it runs silently, like an hourglass.
+Oh, Quin Quin.
+Sometimes I feel it flowing inexorably.
+Sometimes I get up in the middle of the night
+and stop all the clocks...
+        `
+    },
+    {
+        title: "Keys to the Doors",
+        author: "Robin Robertson",
+        no: 7,
+        aboutAuthor: 'https://en.wikipedia.org/wiki/Robin_Robertson_(poet)',
+        poem: `
+I loved your age of wonder: your third and fourth
+and fifth years spent astonished, widening your eyes
+at each new trick of the world—and me standing there,
+solemnly explaining how it was done. The moon and stars,
+rainbows, photographs, gravity, the birds in the air,
+the difference between blood and water.
+In true life? you would say, looking up
+and I would nod, like some broken-hearted sage,
+knowing there would be no answers soon
+to all the big questions that were left, to cruelty and fear,
+to age and grief and death, and no words either.
+And you, like me, will sit and shake your head.
+In true life? Yes, my sweet, strong daughter, I'm afraid
+there is all this as well, and this is it: true life.        `
+    }
 ]
+
+// Personal poems by yash
+const myPoems = [
+    {
+        title: "Silence",
+        author: "yash",
+        no: 1,
+        aboutAuthor: '/about',
+        poem: `
+So much to say, so many thoughts
+Inquiries, observations, emotions of all sorts,
+At the brink of their expression
+Tingling, persuading my hands,
+Sadly never reach the paper of confessions
+     Socrates' daemon never catches up to my reality 
+     A delusional youth, irrestive to his own demise
+        `
+    },
+    {
+        title: "Libertas",
+        author: "yash",
+        no: 2,
+        aboutAuthor: '/about',
+        poem: `
+Illuminating the path 
+to freedom 
+With the torch in her hand
+held high 
+
+The Aureole on her 
+head, 
+The crown of light. 
+
+The rust on the copper, 
+Her fight through time;
+Rename the colour 
+Resilience, 
+Cuz Greenish-Blue just 
+Doesn't suffice.
+
+Thus, don't let her struggle 
+Be in vain, 
+Be Free 
+Be Independent 
+Be You 
+Do not Refrain.
+        `
+    },
+    {
+        title: "untitled",
+        author: "yash",
+        no: 3,
+        aboutAuthor: '/about',
+        poem: `
+Moving through the space of imagination already half asleep, 
+Knowing, will never get to the ultimate truth of this universe that I seek, 
+As this reality and dream blend into an experience making me weep, 
+I'll try not to resist it and let it be.
+        `
+    },
+    {
+        title: "Eternal recurrence",
+        author: "yash",
+        no: 4,
+        aboutAuthor: '/about',
+        poem: `
+Unaware of when I sleep, 
+Wake-up dreaded, 
+Oblivious of time, 
+It's enigma making me feel wretched 
+
+Revolted by the revolving nature of it, 
+Though I know it's not true
+As I am inexorably drawn into the future,
+The inescapable truth
+
+Still perceiving it as periodic illusion, 
+a circle with no beginning no end
+        `
+    },
+    {
+        title: "Poignant Peak",
+        author: "yash",
+        no: 5,
+        aboutAuthor: '/about',
+        poem: `
+The lake, the boats, the mountian 
+Even the lamp de street , 
+All simlple, mundane, silent, still.
+Comforting a bit though it might be,
+Unchanged, lifeless, poignant are the trees.
+That is all,
+My interpretation of the dead Abu peak.
+        `
+    },
+    {
+        title: "untitled",
+        author: "yash",
+        no: 6,
+        aboutAuthor: '/about',
+        poem: `
+Winter is coming, and it'll stay,
+Prepare for the cold, don't fall prey
+To this frost, this ice, this glacial obstacle,
+Stay strong as "Death is so final, 
+But life, 
+Vibrant and full of possibilities", Tyrion said.
+        `
+    },
+    {
+        title: "Whispers of soul",
+        author: "yash",
+        no: 7,
+        aboutAuthor: '/about',
+        poem: `
+Thinking can't be taught,
+It lurks from within.
+Meaning can't be brought,
+It is sculpted from within.
+Yet from within come the illusions, 
+That refrains you from reality. 
+Yet still, from within comes the melody
+That sings of truth. 
+Hence, instead of seeking for answers 
+without, 
+Look within for the music of life.
+From within came to me this wisdom, 
+So I'm lending it to you.
+        `
+    },
+    {
+        title: "A conversation",
+        author: "yash",
+        no: 8,
+        aboutAuthor: '/about',
+        poem: `
+Don't speak, Don't rush.
+Observe.
+Don't imitate, Don't interject.
+Observe 
+
+For thought is impatient
+But Speech, 
+Can be restrained.
+
+So, rein your words 
+And govern your expressions,
+through the lens of critique.
+
+And Listen. Listen. Listen, for once 
+Before you speak things 
+to existence.
+        `
+    },
+    {
+        title: "टाइमआउट",
+        author: "yash",
+        no: 9,
+        aboutAuthor: '/about',
+        poem: `
+नहीं जानता क्यों लग गया वक़्त इतना, 
+मेरी शुक्रगुज़ारि जताने में, 
+शायद मेरी रेख्ता ही बहोत कमज़ोर है, 
+के लफ़्ज़ जुटा नहीं पाया ।।
+
+मगर कुछ दिनों से रोज़, 
+ये पेंसिल लेता ज़रूर हाथ मे, 
+सोच कर के घिस दूँगा काग़ज़ पर
+कुछ शब्द मेरी एहसानमंदगी के 
+
+पर लिखना शुरू करते ही 
+वही कोरे काग़ज़ सा 
+ख़ाली हो जाता था दिमाग़
+लफ़्ज़ आते ही नहीं थे ज़हन मैं 
+के शुक्रिया कैसे करू 
+
+उलज़ मत जाना इस 
+"An ugly attempt of gazal" मे
+पूरी बात का यही सार है की 
+बोहोत ख़ुशगवार हु तेरा 
+दोस्त.
+        `
+    },
+    {
+        title: "Four walls and a ceiling",
+        author: "yash",
+        no: 10,
+        aboutAuthor: '/about',
+        poem: `
+Quiet is the room, 
+Just a fan humming unceasingly.
+The storm's in my mind, 
+Searching for words to cry out. 
+
+So hard is to express, 
+This inability to express, 
+The loneliness my heart screams,
+This nightmare that my soul dreams. 
+
+No winds from the window, 
+No knocks on the door, 
+So poignant is the thought;
+Of not being Loved.
+Of dying Alone.
+        `
+    },
+    {
+        title: "untitled",
+        author: "yash",
+        no: 11,
+        aboutAuthor: '/about',
+        poem: `
+It cannot have a beginning,
+Said Aristotle. 
+It is absolute constant flow 
+Argued newton. 
+Einstein made it a dimension 
+Blending it with space. 
+
+But with time I learned, 
+There are two times. 
+The one which has mesmerised me since my youth. 
+The other that I spend with you. 
+
+Time is a funny thing, 
+Spends my youth learning it (change the whole sentence) 
+Now I'm just yearning it stops
+When I'm  with you.
+        `
+    },
+    {
+        title: "untitled",
+        author: "yash",
+        no: 12,
+        aboutAuthor: '/about',
+        poem: `
+I was laying back on my chair 
+With my head to the ceiling,
+When I felt a cold wind breeze by 
+
+Perplexity I looked around 
+Noting caught my eye 
+
+But then I heard a voice 
+Somber, it cried 
+
+"Hubris let hers be 
+Humility of yours 
+Will even it out" 
+
+Suddenly I woke up;
+Startled. 
+
+Was that a muse 
+Or just another dream ?
+        `
+    },
+        {
+        title: "Glimpse of a flower",
+        author: "yash",
+        no: 13,
+        aboutAuthor: '/about',
+        poem: `
+I did see her, she did see me
+And we did share a smile,
+When I did for a moment go vanish 
+Her eyes did seek me perplexed a while, 
+Believe me thee 
+All this did happen indeed.
+
+Unfortunately or fortunately
+I will never know
+We never did get to share a word;
+She never did find my name, 
+Neither did I find her's.
+        `
+    }
+]
+
 const paintings = [{
         img: Image2,
         description: "The School of Athens",
@@ -538,6 +904,7 @@ export {
     socialprofils,
     logotext,
     poems,
+    myPoems,
     poetryQuotes,
     blogs,
 };

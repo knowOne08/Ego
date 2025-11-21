@@ -42,37 +42,35 @@ export const ArtGallery = () => {
     loadPaintings();
   }, []);
 
-  // Plus Studio inspired grid spans - varied sizes based on aspect ratios
-  const getGridSpans = useMemo(() => {
+  // Mobile layout with size variations
+  const mobileLayoutConfig = useMemo(() => {
     if (!paintings.length) return [];
+    
     return paintings.map((painting, index) => {
-      // Use aspect ratio to determine grid spans
-      let rowSpan = 1;
-      let colSpan = 1;
+      // Add some randomness to sizes while preventing overlaps
+      const sizeVariants = [
+        { colSpan: 1, rowSpan: 1, size: 'small' },
+        { colSpan: 1, rowSpan: 1, size: 'medium' },
+        { colSpan: 2, rowSpan: 1, size: 'wide' },
+        { colSpan: 1, rowSpan: 2, size: 'tall' },
+      ];
       
-      if (painting.aspectRatio) {
-        // Wide images (like Nighthawks, Creation of Adam) get wider spans
-        if (painting.aspectRatio >= 1.8) {
-          colSpan = 2;
-          rowSpan = 1;
-        }
-        // Tall images (like Mona Lisa, portraits) - keep single row for mobile
-        else if (painting.aspectRatio <= 0.7) {
-          colSpan = 1;
-          rowSpan = 1; // Keep consistent for mobile to prevent overlap
-        }
-        // Square-ish images occasionally get double spans for variety
-        else if (index % 7 === 0 && painting.aspectRatio > 1.2) {
-          colSpan = 2;
-          rowSpan = 1;
-        }
+      // Use a mix of sizes with controlled randomness
+      let variant;
+      if (index % 7 === 0) {
+        variant = sizeVariants[2]; // wide
+      } else if (index % 5 === 0) {
+        variant = sizeVariants[3]; // tall
+      } else if (index % 3 === 0) {
+        variant = sizeVariants[1]; // medium
       } else {
-          // Fallback pattern - remove unused variables
-          // const rowSpan = index % 4 === 0 ? 2 : 1;
-          // const colSpan = index % 6 === 0 ? 2 : 1;
-        }
+        variant = sizeVariants[0]; // small
+      }
       
-      return { rowSpan, colSpan };
+      return {
+        ...variant,
+        aspectRatio: painting.aspectRatio || 1
+      };
     });
   }, [paintings]);
 
@@ -182,14 +180,15 @@ export const ArtGallery = () => {
         });
         
         if (!hasOverlap) {
-          placedPaintings.push(newPainting);        positions[index] = {
-          ...painting,
-          id: painting.id || index,
-          x: x + padding,
-          y: y + padding,
-          width,
-          height
-        };
+          placedPaintings.push(newPainting);
+          positions[index] = {
+            ...painting,
+            id: painting.id || index,
+            x: x + padding,
+            y: y + padding,
+            width,
+            height
+          };
           placed = true;
         }
         
@@ -218,8 +217,10 @@ export const ArtGallery = () => {
   }, [paintings, availableSpace, padding]);
 
   const handleTouchStart = (painting) => {
+    // Disable overlay on mobile to prevent interference
     if (isMobile) {
-      setHoveredPainting(painting);
+      // Don't set hovered painting on mobile
+      return;
     }
   };
 
@@ -345,20 +346,19 @@ export const ArtGallery = () => {
           <div className="mobile-gallery-grid">
             <div className="mobile-grid-container">
               {paintings.map((painting, index) => {
-                const spans = getGridSpans[index];
+                const config = mobileLayoutConfig[index] || { colSpan: 1, rowSpan: 1, size: 'small' };
                 return (
                   <div
                     key={index}
-                    className={`mobile-grid-item ${hoveredPainting?.id === index ? 'is-hovered' : ''}`}
+                    className={`mobile-grid-item mobile-grid-item--${config.size}`}
                     style={{
-                      gridRow: `span ${spans.rowSpan}`,
-                      gridColumn: `span ${spans.colSpan}`,
-                      '--item-aspect-ratio': painting.aspectRatio || 1
+                      gridColumn: `span ${config.colSpan}`,
+                      gridRow: `span ${config.rowSpan}`,
                     }}
-                    onMouseEnter={() => handlePaintingHover({...painting, id: index})}
-                    onMouseLeave={handlePaintingLeave}
+                    onMouseEnter={() => !isMobile && handlePaintingHover({...painting, id: index})}
+                    onMouseLeave={!isMobile ? handlePaintingLeave : undefined}
                     onTouchStart={() => handleTouchStart({...painting, id: index})}
-                    onTouchEnd={() => {/* Keep overlay visible for mobile */}}
+                    onTouchEnd={() => {/* Keep simple for mobile */}}
                   >
                     <Link to={`/${painting.link}`} className="mobile-artwork-link">
                       <div className="mobile-artwork-container">
@@ -425,8 +425,8 @@ export const ArtGallery = () => {
           </>
         )}
         
-        {/* Overlay layer (z-index: 100) - appears when hovering */}
-        {hoveredPainting && (
+        {/* Overlay layer (z-index: 100) - appears when hovering - DESKTOP ONLY */}
+        {hoveredPainting && !isMobile && (
           <div 
             className={`artwork-title-overlay ${hoveredPainting ? 'visible' : ''}`}
             style={{ pointerEvents: 'none' }} // Allow mouse events to pass through

@@ -3,3 +3,4 @@ node_modules
 .eslintcache
 
 src/removed_content.js
+build/
