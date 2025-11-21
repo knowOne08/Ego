@@ -1,50 +1,144 @@
-.container {
-    background-color: var(--bg-color);
-    overflow-y: hidden;
-}
-.card_poem_title {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 35px;
-    white-space: nowrap;
-    color: rgb(235, 52, 52);
+/* Poetry Card Page - Minimalist Design */
+
+.poem_navigation {
+    margin-bottom: 2rem;
 }
 
-.main_card {
-    margin:  30px auto 15px;
-    @media (min-width: 1200px) {
-        margin-bottom: 90px; /* Set a larger bottom margin for screens wider than 1200px */
-    }
+.back_link {
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    color: var(--text-color-2);
+    text-decoration: none;
+    transition: color 0.3s ease;
 }
 
+.back_link:hover {
+    color: var(--text-color);
+    text-decoration: none;
+}
 
-.card_poem {
-    font-size: 17px;
-    white-space: nowrap;
+.poem_content {
+    background: var(--primary-color);
+    border-left: 3px solid var(--text-color);
+    padding: 0 0 0 2rem;
+    margin: 2rem 0;
+}
+
+/* .poem_header {
+} */
+
+.poem_title {
+    font-family: 'Marcellus', serif;
+    font-size: 36px;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.poem_title.non-english {
+    font-family: 'Noto Sans Devanagari', 'Marcellus', serif;
+    font-size: 32px;
+}
+
+.poem_meta {
+    margin-bottom: 1rem;
+}
+
+.poem_author {
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+    margin: 0;
+    color: var(--text-color-2);
 }
 
 .author_link {
-    transition: color 0.3s ease-in-out; /* Set the transition duration and timing function */
-    color:rgb(150, 150, 150);
-    font-size: 22px;
-    white-space: nowrap;
-    font-weight: 550;
+    color: var(--text-color-2);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    border-bottom: 1px solid transparent;
 }
 
 .author_link:hover {
-    color: rgba(118, 208, 250, 0.918);
-    text-decoration: underline;
+    color: var(--text-color);
+    text-decoration: none;
+    border-bottom: 1px solid var(--text-color);
 }
 
-/* @media screen and (max-width: 768px) {
-    .card_poem_title {
-        font-size: 29px;
-    }
+.poem_text {
+    margin: 2rem 0;
+}
 
-    .card_poem {
+.poem_body {
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--text-color);
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    white-space: pre-line;
+    overflow-wrap: break-word;
+}
+
+.poem_text.non-english .poem_body {
+    font-family: 'Noto Sans Devanagari', 'Raleway', sans-serif;
+    font-size: 20px;
+    line-height: 2;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .poem_content {
+        padding: 0 0 0 1rem;
+        border-left-width: 2px;
+    }
+    
+    .poem_title {
+        font-size: 28px;
+    }
+    
+    .poem_title.non-english {
+        font-size: 26px;
+    }
+    
+    .poem_author {
+        font-size: 16px;
+    }
+    
+    .poem_body {
+        font-size: 16px;
+        line-height: 1.7;
+    }
+    
+    .poem_text.non-english .poem_body {
+        font-size: 18px;
+        line-height: 1.9;
+    }
+    
+    .back_link {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .poem_title {
+        font-size: 24px;
+    }
+    
+    .poem_title.non-english {
+        font-size: 22px;
+    }
+    
+    .poem_body {
         font-size: 15px;
     }
-
-    .author_link {
-        font-size: 19px;
+    
+    .poem_text.non-english .poem_body {
+        font-size: 17px;
     }
-} */
+    
+    .poem_content {
+        padding: 0 0 0 0.75rem;
+    }
+}

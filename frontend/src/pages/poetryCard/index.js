@@ -1,30 +1,66 @@
-import { HelmetProvider } from "react-helmet-async"
-import { poems } from "../../content_option";
-import { Card, Container } from "react-bootstrap";
+import React from "react";
+import { Helmet, HelmetProvider } from "react-helmet-async"
+import { meta, poems, myPoems } from "../../content_option";
+import { Container, Row, Col } from "react-bootstrap";
 import './style.css'
-import { useState } from "react";
-import { checkIfEnglish } from "../../utils/checkIfStingIsEnglish";
+
 export const PoetryCard = () => {
     let poemNo = (window.location.href).slice(-1) - 1;
+    const isMyPoetry = window.location.pathname.includes('/my-poetry/');
+    const poem = isMyPoetry ? myPoems[poemNo] : poems[poemNo];
+    const backLink = isMyPoetry ? "/poetry#my-poems" : "/poetry";
+    const pageTitle = isMyPoetry ? "My Poetry" : "Recommended Poems";
+    
+    if (!poem) {
+        return (
+            <Container className="sec_sp">
+                <Row>
+                    <Col lg="8" className="mx-auto text-center">
+                        <h1>Poem not found</h1>
+                        <p><a href={backLink}>← Back </a></p>
+                    </Col>
+                </Row>
+            </Container>
+        );
+    }
+
     return (
         <HelmetProvider>
-        <div className="container">
-            <Card style={{ 
-                width: 'auto',
-                maxWidth: '25rem',
-                height: 'auto',
-                background: 'var(--bg-color)',
-                border: 'none',
-            }} className="main_card">
-                <Card.Body>
-                    <Card.Title className="card_poem_title">{poems[poemNo].title}</Card.Title>
-                    <Card.Subtitle className="mb-4 text-muted card_poem_author"> <a className="author_link" href={poems[poemNo].aboutAuthor}>{checkIfEnglish(poems[poemNo].author) + poems[poemNo].author}</a></Card.Subtitle>
-                    <Card.Text className="card_poem" style={{ whiteSpace: 'pre-line', marginBottom: 10 }}>
-                    {poems[poemNo].poem}
-                    </Card.Text>
-                </Card.Body>
-                </Card>
-            </div>
+            <Container className="sec_sp">
+                <Helmet>
+                    <meta charSet="utf-8" />
+                    <title>{poem.title} | {meta.title}</title>
+                    <meta name="description" content={`Read "${poem.title}" by ${poem.author}`} />
+                </Helmet>
+                
+                <Row>
+                    <Col lg="8" className="mx-auto">
+                        <div className="poem_navigation mb-4">
+                            <a href={backLink} className="back_link">← Back </a>
+                        </div>
+                        
+                        <div className="poem_content">
+                            <header className="poem_header">
+                                <h1>
+                                    {poem.title}
+                                </h1>
+                                <div className="poem_meta">
+                                    <p className="poem_author">
+                                        <a href={poem.aboutAuthor} className="author_link" target="_blank" rel="noopener noreferrer">
+                                            {poem.author}
+                                        </a>
+                                    </p>
+                                </div>
+                                <hr className="t_border my-4 ml-0 text-left" />
+                            </header>
+                            
+                            <div>
+                                <pre className="poem_body">{poem.poem}</pre>
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
+            </Container>
         </HelmetProvider>
     )
 }

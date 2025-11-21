@@ -1,48 +1,190 @@
-.heading .title {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 40px;
-    color: rgb(0, 102, 255);
+/* Poetry Page - Minimalist Design */
+
+.quote_section {
+    margin-bottom: 3rem;
 }
 
-.heading .quote {
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-size: 25px;
+.quote_text {
+    font-family: 'Marcellus', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--text-color-2);
+    line-height: 1.6;
+    margin: 0;
+    transition: all 0.3s ease;
 }
 
-.menu  {
-    margin: 20px;
-    padding-top: 10px;
+/* Tab Navigation */
+.tab_navigation {
+    display: flex;
+    margin-bottom: 3rem;
+}
+
+.tab_button {
+    background: none;
+    border: none;
+    padding: 1rem 0;
+    margin-right: 3rem;
+    font-family: 'Marcellus', serif;
+    font-size: 18px;
+    color: var(--text-color-2);
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.tab_button:hover {
+    color: var(--text-color);
+}
+
+.tab_button.active {
+    color: var(--text-color);
+    border-bottom-color: var(--text-color-3);
+}
+
+.tab_button:focus {
+    outline: none;
+}
+
+.poem_link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.poem_link:hover {
+    text-decoration: none;
+    color: inherit;
+    transform: translateX(10px);
+}
+
+.poem_item {
+    padding: 1.5rem 0;
+    cursor: pointer;
+    position: relative;
+}
+
+.poem_link:hover .poem_item {
+    background: rgba(var(--text-color-rgb), 0.02);
+    padding: 1.5rem 1rem;
+    margin: 0 -1rem;
+    border-radius: 8px;
 }
 
 .poem_title {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 40px;
-    transition: color 0.5s ease-in-out; /* Set the transition duration and timing function */
-
+    font-family: 'Marcellus', serif;
+    font-size: 24px;
+    line-height: 1.3;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+    margin-bottom: 0 !important; /* Remove gap between title and author */
 }
 
-.poem_title:hover {
-    color: rgba(255, 73, 73, 0.918);
+.poem_link:hover .poem_title {
+    color: var(--text-color-2);
 }
 
 .poem_author {
-    font-size: 20px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    margin-bottom: 1rem; /* Gap between author and excerpt */
+    font-weight: 300;
+    color: var(--text-color-3); /* Primary pink color */
 }
 
-@media screen and (max-width: 768px) {
-    .heading .title {
-        font-size: 30px;
-    }
+.poem_excerpt {
+    font-family: 'Raleway', sans-serif;
+    font-size: 15px;
+    color: var(--text-color);
+    line-height: 1.6;
+    margin-bottom: 1rem; /* Gap before read more */
+    opacity: 0.9;
+}
 
-    .heading .quote {
+.read_more {
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    color: var(--text-color-2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.poem_link:hover .read_more {
+    opacity: 1;
+}
+
+.arrow {
+    transition: transform 0.3s ease;
+}
+
+.poem_link:hover .arrow {
+    transform: translateX(5px);
+}
+
+/* Personal Poems (Scribbles) - Different styling for author and excerpt */
+.personal-poem-author {
+    font-style: italic !important;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    opacity: 0.9;
+    margin-bottom: 0.5rem !important; /* Smaller gap between author and excerpt for personal poems */
+    color: var(--text-color-3) !important; /* Primary pink color */
+}
+
+.personal-poem-excerpt {
+    font-style: normal !important;
+    font-size: 13px !important;
+    opacity: 0.8;
+    line-height: 1.4 !important;
+    margin-bottom: 1rem !important; /* Gap before read more */
+}
+
+/* Remove default margins from h3 elements in poem items */
+.poem_item h3 {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Remove default margins from p elements in poem items */
+.poem_item p {
+    margin-top: 0 !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .quote_text {
+        font-size: 16px;
+    }
+    
+    .tab_button {
+        font-size: 16px;
+        margin-right: 2rem;
+        padding: 0.8rem 0;
+    }
+    
+    .poem_title {
         font-size: 20px;
     }
-
-    .poem_title {
-        font-size: 30px;
-    }
-
+    
     .poem_author {
-        font-size: 16px;
+        font-size: 14px;
+    }
+    
+    .poem_excerpt {
+        font-size: 14px;
+    }
+    
+    .poem_link:hover {
+        transform: none;
+    }
+    
+    .poem_link:hover .poem_item {
+        padding: 1.5rem 0.5rem;
+        margin: 0 -0.5rem;
     }
 }
