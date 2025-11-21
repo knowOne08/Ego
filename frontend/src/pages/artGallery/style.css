@@ -154,7 +154,7 @@
   font-size: clamp(1.5rem, 3vw, 3rem);
   font-weight: 400;
   margin: 0;
-  opacity: 0.8;
+  color: var(--text-color-3, #ff014f);
   font-style: italic;
 }
 
@@ -377,20 +377,9 @@
 
 /* Ensure images fill their containers properly on mobile */
 .mobile-artwork-container .mobile-artwork-image {
-  min-height: 150px; /* Minimum height to prevent too small images */
-  max-height: 400px; /* Maximum height to prevent too large images */
-}
-
-/* Maintain aspect ratios for mobile grid items */
-.mobile-gallery-grid .mobile-grid-item {
-  aspect-ratio: var(--item-aspect-ratio, 1);
-  overflow: hidden;
-  border-radius: 12px;
-}
-
-/* Override aspect ratio for wide items */
-.mobile-gallery-grid .mobile-grid-item[style*="span 2"] {
-  aspect-ratio: var(--item-aspect-ratio, 2);
+  min-height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 /* Desktop optimized image loading */
@@ -443,19 +432,17 @@
   
   .mobile-grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(45vw, 200px), 1fr));
-    grid-auto-rows: min-content;
-    gap: 2.5vw;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns for more flexibility */
+    grid-auto-rows: 120px; /* Fixed row height */
+    gap: 12px;
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 3.5vw 80px;
-    /* Plus Studio inspired dense packing */
-    grid-auto-flow: dense;
-    /* Ensure minimum 2 columns on mobile */
-    min-height: 100vh;
+    padding: 0 15px 80px;
+    width: 100%;
+    align-items: start;
   }
   
-  /* Plus Studio style - varied grid spans with proper aspect ratios */
+  /* Base mobile grid item */
   .mobile-grid-item {
     position: relative;
     background: var(--bg-color);
@@ -464,12 +451,28 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     cursor: pointer;
-    /* Use aspect ratio to determine height */
-    aspect-ratio: var(--item-aspect-ratio, 1);
     width: 100%;
+    height: 100%;
   }
   
-  /* Plus Studio hover effect - same as desktop but adapted for mobile */
+  /* Size variations */
+  .mobile-grid-item--small {
+    min-height: 120px;
+  }
+  
+  .mobile-grid-item--medium {
+    min-height: 140px;
+  }
+  
+  .mobile-grid-item--wide {
+    min-height: 120px;
+  }
+  
+  .mobile-grid-item--tall {
+    min-height: 250px;
+  }
+  
+  /* Hover effects for mobile */
   .mobile-grid-container:has(.mobile-grid-item:hover) .mobile-grid-item:not(:hover) {
     opacity: 0.3;
     transition: opacity 0.3s ease;
@@ -497,6 +500,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+  }
+  
+  .mobile-artwork-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease;
+    transform: translateZ(0);
   }
   
   .mobile-artwork-image {
