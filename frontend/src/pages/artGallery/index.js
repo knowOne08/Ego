@@ -433,7 +433,7 @@ export const ArtGallery = () => {
           >
             <div className="artwork-title-text">
               <h1 className="artwork-name">{hoveredPainting.description}</h1>
-              <p className="artwork-artist">by {hoveredPainting.artist || 'Unknown Artist'}</p>
+              <p className="artwork-artist">{hoveredPainting.artist || 'Unknown Artist'}</p>
             </div>
           </div>
         )}
