@@ -5,9 +5,19 @@ import { Container, Row, Col } from "react-bootstrap";
 import './style.css'
 
 export const PoetryCard = () => {
-    let poemNo = (window.location.href).slice(-1) - 1;
+    // Extract poem number from URL properly (handles multi-digit numbers)
+    const urlParts = window.location.pathname.split('/');
+    const poemNoFromUrl = parseInt(urlParts[urlParts.length - 1]);
     const isMyPoetry = window.location.pathname.includes('/my-poetry/');
-    const poem = isMyPoetry ? myPoems[poemNo] : poems[poemNo];
+    
+    // Find the poem by matching the 'no' property instead of using array index
+    let poem;
+    if (isMyPoetry) {
+        poem = myPoems.find(p => p.no === poemNoFromUrl);
+    } else {
+        poem = poems.find(p => p.no === poemNoFromUrl);
+    }
+    
     const backLink = isMyPoetry ? "/poetry#my-poems" : "/poetry";
     const pageTitle = isMyPoetry ? "My Poetry" : "Recommended Poems";
     
