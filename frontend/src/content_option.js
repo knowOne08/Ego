@@ -513,26 +513,6 @@ Startled.
 Was that a muse 
 Or just another dream ?
         `
-    },
-        {
-        title: "Glimpse of a flower",
-        author: "yash",
-        no: 13,
-        aboutAuthor: '/about',
-        poem: `
-I did see her, she did see me
-And we did share a smile,
-When I did for a moment go vanish 
-Her eyes did seek me perplexed a while, 
-Believe me thee 
-All this did happen indeed.
-
-Unfortunately or fortunately
-I will never know
-We never did get to share a word;
-She never did find my name, 
-Neither did I find her's.
-        `
     }
 ]
 
