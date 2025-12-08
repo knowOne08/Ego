@@ -27,11 +27,12 @@ export const ProjectDetail = () => {
       // For mobile devices, ensure we start at the top
       if (window.innerWidth <= 768) {
         window.scrollTo({ top: 0, behavior: 'auto' });
-        // Force scroll to top after a brief delay to handle viewport changes
-        setTimeout(() => window.scrollTo({ top: 0, behavior: 'auto' }), 50);
       }
       
-      setTimeout(() => setIsLoaded(true), 300);
+      // Use RAF instead of setTimeout for better performance
+      requestAnimationFrame(() => {
+        setIsLoaded(true);
+      });
     } else {
       navigate('/portfolio');
     }
@@ -85,37 +86,59 @@ export const ProjectDetail = () => {
 
   useEffect(() => {
     // Parallax scrolling effect and scroll indicator visibility
+    let scrollTimeout;
+    let lastScrollTime = 0;
+    const SCROLL_DEBOUNCE_MS = 16; // ~60fps
+    
     const handleScroll = () => {
+      const now = Date.now();
       const scrolled = window.pageYOffset;
       
       // Hide scroll indicator after scrolling 100px
       setShowScrollIndicator(scrolled < 100);
       
+      // Debounce parallax updates to prevent excessive reflows
+      if (now - lastScrollTime < SCROLL_DEBOUNCE_MS) {
+        return;
+      }
+      lastScrollTime = now;
+      
       // Only apply parallax on desktop to avoid mobile performance issues
       if (!isMobile && heroRef.current) {
         const parallax = heroRef.current.querySelector('.hero-bg');
         if (parallax) {
+          // Use transform instead of style.transform for better performance
+          parallax.style.willChange = 'transform';
           parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
         }
       }
     };
 
-    // Prevent initial scroll on mobile - ensure we start at top
+    // Prevent initial scroll on mobile - use a single RAF instead of multiple timeouts
     if (isMobile) {
       window.scrollTo(0, 0);
       
-      // Add a small delay to ensure DOM is ready and prevent viewport changes from causing scroll
-      const preventInitialScroll = () => {
+      // Use requestAnimationFrame for smooth scroll reset
+      const resetScroll = () => {
         window.scrollTo(0, 0);
       };
       
-      setTimeout(preventInitialScroll, 100);
-      setTimeout(preventInitialScroll, 300);
-      setTimeout(preventInitialScroll, 500);
+      const rafId = requestAnimationFrame(() => {
+        requestAnimationFrame(resetScroll);
+      });
+      
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+        cancelAnimationFrame(rafId);
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+      };
     }
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+    };
   }, [isMobile]);
 
   if (!project) {

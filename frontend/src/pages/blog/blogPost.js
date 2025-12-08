@@ -75,6 +75,9 @@ export const BlogPost = () => {
             setShowLightModeOverlay(true);
             
             // Play 2001 Space Odyssey-style music
+            // TEMPORARILY DISABLED due to performance impact
+            // Uncomment if you want to re-enable the audio
+            /*
             console.log('🎵 Attempting to play audio...');
             
             // Create audio element
@@ -103,6 +106,8 @@ export const BlogPost = () => {
                         console.log('ℹ️  This is usually due to browser autoplay policy');
                     });
             }
+            */
+            let audio = null;
             
             // Hide overlay after animation completes (6 seconds)
             // Audio continues playing for a bit longer (10 seconds total)
@@ -399,7 +404,11 @@ export const BlogPost = () => {
             <>
                 <Container className="blog-post-container">
                     <div className="blog-loading" style={{ opacity: showLightModeOverlay ? 0 : 1 }}>
-                        <div className="loading-spinner"></div>
+                        <div className="loading-spinner">
+                            <div className="loading-dot"></div>
+                            <div className="loading-dot"></div>
+                            <div className="loading-dot"></div>
+                        </div>
                         <p>Loading blog post...</p>
                     </div>
                 </Container>

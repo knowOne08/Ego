@@ -16,15 +16,21 @@ const Headermain = () => {
 
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
+    let timeout;
     const handleScroll = () => {
-      // console.log(window.scrollY)
-      setIsScrolled(window.scrollY > 1);
+      // Clear previous timeout
+      clearTimeout(timeout);
+      // Debounce scroll event - only update state if user stops scrolling
+      timeout = setTimeout(() => {
+        setIsScrolled(window.scrollY > 1);
+      }, 150);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timeout);
     };
   }, []);
 

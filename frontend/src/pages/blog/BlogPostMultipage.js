@@ -101,7 +101,11 @@ export const BlogPost = () => {
     if (loading) {
         return (
             <div className="blog-post-loading">
-                <div className="loading-spinner"></div>
+                <div className="loading-spinner">
+                    <div className="loading-dot"></div>
+                    <div className="loading-dot"></div>
+                    <div className="loading-dot"></div>
+                </div>
                 <p>Loading...</p>
             </div>
         );

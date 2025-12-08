@@ -96,7 +96,11 @@ export const Blog = () => {
 
                 {loading && (
                     <div className="blog-loading">
-                        <div className="loading-spinner"></div>
+                        <div className="loading-spinner">
+                            <div className="loading-dot"></div>
+                            <div className="loading-dot"></div>
+                            <div className="loading-dot"></div>
+                        </div>
                         <p>Loading blogs...</p>
                     </div>
                 )}
