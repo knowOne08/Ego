@@ -9,6 +9,8 @@ import "./style.css";
 export const ArtGallery = () => {
   const canvasRef = useRef(null);
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
+  const mousePositionRef = useRef({ x: 50, y: 50 });
+  const animationFrameRef = useRef(null);
   const [hoveredPainting, setHoveredPainting] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [paintings, setPaintings] = useState([]);
@@ -245,7 +247,17 @@ export const ArtGallery = () => {
       if (!isMobile) {
         const x = (e.clientX / window.innerWidth) * 100;
         const y = (e.clientY / window.innerHeight) * 100;
-        setMousePosition({ x, y });
+        
+        // Update ref immediately for RAF
+        mousePositionRef.current = { x, y };
+        
+        // Schedule state update using RAF to batch updates
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+        animationFrameRef.current = requestAnimationFrame(() => {
+          setMousePosition(mousePositionRef.current);
+        });
       }
     };
 
@@ -254,7 +266,14 @@ export const ArtGallery = () => {
         const touch = e.touches[0];
         const x = (touch.clientX / window.innerWidth) * 100;
         const y = (touch.clientY / window.innerHeight) * 100;
-        setMousePosition({ x, y });
+        mousePositionRef.current = { x, y };
+        
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+        animationFrameRef.current = requestAnimationFrame(() => {
+          setMousePosition(mousePositionRef.current);
+        });
       }
     };
 
@@ -270,6 +289,11 @@ export const ArtGallery = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('resize', handleResize);
+      
+      // Clean up RAF
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
       
       // Clean up hover timeout
       if (hoverTimeoutRef.current) {
@@ -291,7 +315,11 @@ export const ArtGallery = () => {
         
         <div className="gallery-main">
           <div className="gallery-loading">
-            <div className="loading-spinner"></div>
+            <div className="loading-spinner">
+              <div className="loading-dot"></div>
+              <div className="loading-dot"></div>
+              <div className="loading-dot"></div>
+            </div>
             <p>Loading gallery...</p>
           </div>
         </div>

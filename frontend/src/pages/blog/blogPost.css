@@ -82,7 +82,7 @@
 /* Sidebar Toggle Button - Clean chevron arrow that moves in/out */
 .sidebar-toggle {
     position: absolute;
-    top: 3.9rem;
+    top: -0.17rem;
     left: 280px; /* Default position when sidebar is open - at right edge of sidebar */
     width: 40px;
     height: 40px;
@@ -268,7 +268,7 @@
 .blog-post-container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 2rem 1rem;
+    padding: 0 1rem;
     min-height: 100vh;
 }
 
@@ -283,7 +283,7 @@
 
 /* Blog Post Header */
 .blog-post-header {
-    padding: 2rem 2rem;
+    padding: 0 2rem 2rem;
     text-align: left;
     border-bottom: 1px solid var(--text-light);
     margin-bottom: 1rem;
@@ -359,8 +359,13 @@
 
 /* Blog Post Image */
 .blog-post-image {
-    height: 400px;
+    height: 250px;
     overflow: hidden;
+}
+
+.blog-post-image.jekyll-cover {
+    max-width: 680px;
+    margin: 0 auto;
 }
 
 .blog-post-image img {
@@ -385,8 +390,7 @@
 .blog-h1, .blog-content-body h1 {
     font-size: 2.2rem;
     font-weight: 700;
-    margin: 2.5rem 0 1.5rem 0;
-    color: var(--text-color);
+    margin: 0 0 -1.5rem 0;
     border-bottom: 2px solid var(--text-light);
     padding-bottom: 0.5rem;
 }

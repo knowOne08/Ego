@@ -115,12 +115,12 @@ function CursorCore({
     const cursorInnerRef = useRef()
     const requestRef = useRef()
     const previousTimeRef = useRef()
-    const [coords, setCoords] = useState({ x: 0, y: 0 })
+    const coordsRef = useRef({ x: 0, y: 0 })
     const [isVisible, setIsVisible] = useState(false)
     const [isActive, setIsActive] = useState(false)
     const [isActiveClickable, setIsActiveClickable] = useState(false)
-    let endX = useRef(0)
-    let endY = useRef(0)
+    const endX = useRef(0)
+    const endY = useRef(0)
   
     /**
      * Primary Mouse move event
@@ -128,9 +128,10 @@ function CursorCore({
      * @param {number} clientY - MouseEvent.clienty
      */
     const onMouseMove = useCallback(({ clientX, clientY }) => {
-      setCoords({ x: clientX, y: clientY })
-      cursorInnerRef.current.style.top = `${clientY}px`
-      cursorInnerRef.current.style.left = `${clientX}px`
+      if (cursorInnerRef.current) {
+        cursorInnerRef.current.style.top = `${clientY}px`
+        cursorInnerRef.current.style.left = `${clientX}px`
+      }
       endX.current = clientX
       endY.current = clientY
     }, [])
@@ -139,15 +140,17 @@ function CursorCore({
     const animateOuterCursor = useCallback(
       (time) => {
         if (previousTimeRef.current !== undefined) {
-          coords.x += (endX.current - coords.x) / trailingSpeed
-          coords.y += (endY.current - coords.y) / trailingSpeed
-          cursorOuterRef.current.style.top = `${coords.y}px`
-          cursorOuterRef.current.style.left = `${coords.x}px`
+          coordsRef.current.x += (endX.current - coordsRef.current.x) / trailingSpeed
+          coordsRef.current.y += (endY.current - coordsRef.current.y) / trailingSpeed
+          if (cursorOuterRef.current) {
+            cursorOuterRef.current.style.top = `${coordsRef.current.y}px`
+            cursorOuterRef.current.style.left = `${coordsRef.current.x}px`
+          }
         }
         previousTimeRef.current = time
         requestRef.current = requestAnimationFrame(animateOuterCursor)
       },
-      [requestRef] // eslint-disable-line
+      [trailingSpeed]
     )
   
     // RAF for animateOuterCursor
@@ -204,51 +207,59 @@ function CursorCore({
   
     useEffect(() => {
       const clickableEls = document.querySelectorAll(clickables.join(','))
-  
-      clickableEls.forEach((el) => {
-        el.style.cursor = 'none'
-  
-        el.addEventListener('mouseover', () => {
-          setIsActive(true)
-        })
-        el.addEventListener('click', () => {
+      
+      const handleMouseOverClickable = (el) => {
+        return () => setIsActive(true)
+      }
+      
+      const handleMouseDownClickable = (el) => {
+        return () => setIsActiveClickable(true)
+      }
+      
+      const handleMouseUpClickable = (el) => {
+        return () => {
           setIsActive(true)
           setIsActiveClickable(false)
-        })
-        el.addEventListener('mousedown', () => {
-          setIsActiveClickable(true)
-        })
-        el.addEventListener('mouseup', () => {
-          setIsActive(true)
-        })
-        el.addEventListener('mouseout', () => {
+        }
+      }
+      
+      const handleMouseOutClickable = (el) => {
+        return () => {
           setIsActive(false)
           setIsActiveClickable(false)
-        })
+        }
+      }
+
+      clickableEls.forEach((el) => {
+        el.style.cursor = 'none'
+        
+        const overHandler = handleMouseOverClickable(el)
+        const downHandler = handleMouseDownClickable(el)
+        const upHandler = handleMouseUpClickable(el)
+        const outHandler = handleMouseOutClickable(el)
+
+        el.addEventListener('mouseover', overHandler)
+        el.addEventListener('mousedown', downHandler)
+        el.addEventListener('mouseup', upHandler)
+        el.addEventListener('mouseout', outHandler)
+        
+        // Store handlers for cleanup
+        el.__cursorHandlers = { overHandler, downHandler, upHandler, outHandler }
       })
-  
+
       return () => {
         clickableEls.forEach((el) => {
-          el.removeEventListener('mouseover', () => {
-            setIsActive(true)
-          })
-          el.removeEventListener('click', () => {
-            setIsActive(true)
-            setIsActiveClickable(false)
-          })
-          el.removeEventListener('mousedown', () => {
-            setIsActiveClickable(true)
-          })
-          el.removeEventListener('mouseup', () => {
-            setIsActive(true)
-          })
-          el.removeEventListener('mouseout', () => {
-            setIsActive(false)
-            setIsActiveClickable(false)
-          })
+          if (el.__cursorHandlers) {
+            const { overHandler, downHandler, upHandler, outHandler } = el.__cursorHandlers
+            el.removeEventListener('mouseover', overHandler)
+            el.removeEventListener('mousedown', downHandler)
+            el.removeEventListener('mouseup', upHandler)
+            el.removeEventListener('mouseout', outHandler)
+            delete el.__cursorHandlers
+          }
         })
       }
-    }, [isActive, clickables])
+    }, [clickables])
   
     // Cursor Styles
     const styles = {
