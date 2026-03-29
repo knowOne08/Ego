@@ -1,5 +1,7 @@
-const GITHUB_REPO = 'knowOne08/blogs';
-const RAW_BASE = `https://raw.githubusercontent.com/${GITHUB_REPO}/main`;
+const GITBOOK_REPO = 'knowOne08/blogs';
+const JEKYLL_REPO = 'knowOne08/from-the-bench';
+const RAW_BASE = `https://raw.githubusercontent.com/${GITBOOK_REPO}/main`;
+const JEKYLL_RAW_BASE = `https://raw.githubusercontent.com/${JEKYLL_REPO}/main`;
 
 const blogs = [
   {
@@ -36,6 +38,19 @@ const blogs = [
     featured: false,
     githubFolder: "JustEase",
     cover: null,
+    status: "published",
+  },
+  {
+    id: 4,
+    title: "Why Ethernet Isn't Doing It for Me",
+    excerpt: "Engineering notes from building a distributed DAQ for rocket engines. Piece 1 of the Ethernet → TSN arc.",
+    date: "2026-03-21",
+    readTime: "10 min read",
+    tags: ["Networking", "Engineering", "DAQ", "Rocketry"],
+    featured: true,
+    type: "jekyll",
+    jekyllFile: "_posts/2026-03-21-why-ethernet-isnt-doing-it-for-me.html",
+    cover: `${JEKYLL_RAW_BASE}/assets/images/ethernet-piece1/cover_blog1.jpg`,
     status: "published",
   },
 ];
@@ -179,4 +194,38 @@ export const fetchBlogPage = async (blog, filename) => {
   if (!res.ok) throw new Error(`Failed to fetch page: ${res.status}`);
   const markdown = await res.text();
   return processGitBookImages(markdown, blog.githubFolder);
+};
+
+/**
+ * Fetch a Jekyll blog post (HTML).
+ * Parses cover from frontmatter, strips wrapper, returns { content, cover }.
+ */
+export const fetchJekyllContent = async (blog) => {
+  const url = `${JEKYLL_RAW_BASE}/${blog.jekyllFile}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch Jekyll post: ${res.status}`);
+  const html = await res.text();
+
+  // Parse frontmatter for cover
+  let cover = null;
+  const fmMatch = html.match(/^---\n([\s\S]*?)\n---/);
+  if (fmMatch) {
+    const coverMatch = fmMatch[1].match(/^cover:\s*(.+)/m);
+    if (coverMatch) {
+      const coverPath = coverMatch[1].trim();
+      cover = coverPath.startsWith('http')
+        ? coverPath
+        : `${JEKYLL_RAW_BASE}/${coverPath}`;
+    }
+  }
+
+  // Strip frontmatter
+  const withoutFrontmatter = html.replace(/^---[\s\S]*?---\s*/, '');
+
+  // Extract content inside <body>...</body>
+  const bodyMatch = withoutFrontmatter.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+  return {
+    content: bodyMatch ? bodyMatch[1] : withoutFrontmatter,
+    cover,
+  };
 };

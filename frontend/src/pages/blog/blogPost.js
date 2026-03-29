@@ -9,7 +9,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
-import { getBlogById, fetchBlogContent, fetchBlogPages, fetchBlogPage } from "../../services/blogService";
+import { getBlogById, fetchBlogContent, fetchBlogPages, fetchBlogPage, fetchJekyllContent } from "../../services/blogService";
 
 // Custom sanitize schema to allow GitBook HTML elements
 const customSanitizeSchema = {
@@ -111,21 +111,28 @@ export const BlogPost = () => {
             setBlog(blogData);
 
             try {
-                // Load pages list from SUMMARY.md
-                const blogPages = await fetchBlogPages(blogData);
-                setPages(blogPages);
-
-                if (pageSlug) {
-                    // Fetch specific page
-                    const pageContent = await fetchBlogPage(blogData, pageSlug);
-                    setContent(pageContent);
-                    setCurrentPageSlug(pageSlug);
-                } else {
-                    // Fetch main README.md
-                    const result = await fetchBlogContent(blogData);
+                if (blogData.type === 'jekyll') {
+                    // Jekyll posts: fetch HTML directly, no pages/multipage
+                    const result = await fetchJekyllContent(blogData);
                     setContent(result.content);
                     setCover(result.cover);
+                    setPages([]);
                     setCurrentPageSlug(null);
+                } else {
+                    // GitBook posts: markdown with optional multipage
+                    const blogPages = await fetchBlogPages(blogData);
+                    setPages(blogPages);
+
+                    if (pageSlug) {
+                        const pageContent = await fetchBlogPage(blogData, pageSlug);
+                        setContent(pageContent);
+                        setCurrentPageSlug(pageSlug);
+                    } else {
+                        const result = await fetchBlogContent(blogData);
+                        setContent(result.content);
+                        setCover(result.cover);
+                        setCurrentPageSlug(null);
+                    }
                 }
             } catch (err) {
                 setError(err.message);
@@ -404,39 +411,43 @@ export const BlogPost = () => {
                                     ← Back to Blog
                                 </button>
 
-                                <div className="blog-post-meta">
-                                    <span className="blog-post-date">{blog.date}</span>
-                                    <span className="blog-post-read-time">{blog.readTime}</span>
-                                </div>
-
                                 {cover && (
-                                    <div className="blog-post-image">
+                                    <div className={`blog-post-image${blog.type === 'jekyll' ? ' jekyll-cover' : ''}`}>
                                         <img src={cover} alt={blog.title} />
                                     </div>
                                 )}
 
-                                <h1 className="blog-post-title">{blog.title}</h1>
+                                {blog.type !== 'jekyll' && (
+                                    <>
+                                        <div className="blog-post-meta">
+                                            <span className="blog-post-date">{blog.date}</span>
+                                            <span className="blog-post-read-time">{blog.readTime}</span>
+                                        </div>
 
-                                {/* Always show the excerpt/description below the title (small grey subtitle) */}
-                                {blog.excerpt && (
-                                    <p className="blog-post-description">{blog.excerpt}</p>
+                                        <h1 className="blog-post-title">{blog.title}</h1>
+
+                                        {blog.excerpt && (
+                                            <p className="blog-post-description">{blog.excerpt}</p>
+                                        )}
+                                    </>
                                 )}
-
-                                {/* Tags are displayed only on the listing/thumbnail cards — not on the full post */}
-                                {/* (Intentionally omitted here) */}
                             </div>
 
                             <div className="blog-post-content">
                                 <div className="blog-content-body">
-                                    <ReactMarkdown
-                                        children={processContent(content)}
-                                        remarkPlugins={[remarkGfm]}
-                                        rehypePlugins={[
-                                            rehypeRaw,
-                                            [rehypeSanitize, customSanitizeSchema]
-                                        ]}
-                                        components={markdownComponents}
-                                    />
+                                    {blog.type === 'jekyll' ? (
+                                        <div dangerouslySetInnerHTML={{ __html: content }} />
+                                    ) : (
+                                        <ReactMarkdown
+                                            children={processContent(content)}
+                                            remarkPlugins={[remarkGfm]}
+                                            rehypePlugins={[
+                                                rehypeRaw,
+                                                [rehypeSanitize, customSanitizeSchema]
+                                            ]}
+                                            components={markdownComponents}
+                                        />
+                                    )}
                                 </div>
                             </div>
 

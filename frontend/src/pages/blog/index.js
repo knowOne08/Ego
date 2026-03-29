@@ -62,11 +62,9 @@ export const Blog = () => {
                             <Col lg={6} md={12} key={blog.id} className="mb-4">
                                 <Link to={getBlogUrl(blog)} className="blog-card-link">
                                     <div className="blog-card featured-card">
-                                        {blog.coverUrl && (
-                                            <div className="blog-card-image">
-                                                <img src={blog.coverUrl} alt={blog.title} />
-                                            </div>
-                                        )}
+                                        <div className="blog-card-image">
+                                            <img src={blog.coverUrl || defaultCover} alt={blog.title} />
+                                        </div>
                                         <div className="blog-content">
                                             <div className="blog-meta">
                                                 <span className="blog-date">{blog.date}</span>
