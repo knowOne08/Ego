@@ -9,7 +9,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
-import { API_BASE_URL, API_KEY } from "../../config/api";
+import { getBlogById, fetchBlogContent, fetchBlogPages, fetchBlogPage } from "../../services/blogService";
 
 // Custom sanitize schema to allow GitBook HTML elements
 const customSanitizeSchema = {
@@ -47,9 +47,10 @@ export const BlogPost = () => {
     const { blogId, pageSlug } = useParams();
     const navigate = useNavigate();
     const [blog, setBlog] = useState(null);
-    const [currentPage, setCurrentPage] = useState(null);
+    const [content, setContent] = useState('');
+    const [cover, setCover] = useState(null);
     const [pages, setPages] = useState([]);
-    const [pageNavigation, setPageNavigation] = useState({ previous: null, next: null });
+    const [currentPageSlug, setCurrentPageSlug] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -59,100 +60,88 @@ export const BlogPost = () => {
     // Handle light mode preference IMMEDIATELY on mount (before content loads)
     useEffect(() => {
         const currentTheme = localStorage.getItem('theme') || 'dark';
-        
+
         if (currentTheme === 'dark') {
-            console.log('🌙 Dark mode detected, switching to light mode with overlay...');
-            
-            // User was in dark mode, switch to light and show overlay IMMEDIATELY
             setWasInDarkMode(true);
             localStorage.setItem('theme', 'light');
             document.documentElement.setAttribute('data-theme', 'light');
-            
-            // Dispatch custom event to notify theme toggle
             window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: 'light' } }));
-            
-            // Show overlay immediately (it will stay visible during loading)
             setShowLightModeOverlay(true);
-            
-            // Play 2001 Space Odyssey-style music
-            // TEMPORARILY DISABLED due to performance impact
-            // Uncomment if you want to re-enable the audio
-            /*
-            console.log('🎵 Attempting to play audio...');
-            
-            // Create audio element
+
             const audio = new Audio('/audio/space-odyssey.mp3');
-            audio.volume = 1; // Max volume - audio file has built-in fade
-            audio.preload = 'auto';
-            
-            // Start at a specific time (in seconds)
-            audio.currentTime = 0; // Change this to start at different point (e.g., 5 for 5 seconds in)
-           
-            console.log('🎵 Audio object created:', audio.src);
-            console.log('⏱️  Starting at:', audio.currentTime, 'seconds');
-            
-            // Try to play
-            const playPromise = audio.play();
-            
-            if (playPromise !== undefined) {
-                playPromise
-                    .then(() => {
-                        console.log('✅ SUCCESS! Audio is playing at full volume!');
-                        console.log('🔊 Volume:', audio.volume);
-                        console.log('⏱️  Duration:', audio.duration);
-                    })
-                    .catch(error => {
-                        console.error('❌ Audio playback failed:', error.name, error.message);
-                        console.log('ℹ️  This is usually due to browser autoplay policy');
-                    });
-            }
-            */
-            let audio = null;
-            
-            // Hide overlay after animation completes (6 seconds)
-            // Audio continues playing for a bit longer (10 seconds total)
+            audio.volume = 1;
+            audio.currentTime = 0;
+            audio.play().catch(() => {});
+
             const hideTimeout = setTimeout(() => {
                 setShowLightModeOverlay(false);
-            }, 6000); // Overlay hides at 6 seconds
-            
+            }, 6000);
+
             const stopAudioTimeout = setTimeout(() => {
-                if (audio) {
-                    audio.pause();
-                    console.log('🛑 Audio stopped');
-                }
-            }, 13000); // Audio stops at 10 seconds
-            
-            // Cleanup
+                audio.pause();
+            }, 13000);
+
             return () => {
                 clearTimeout(hideTimeout);
                 clearTimeout(stopAudioTimeout);
-                if (audio) audio.pause();
+                audio.pause();
             };
         }
-        
-        // Cleanup: restore dark mode when leaving the blog post
+
         return () => {
             if (wasInDarkMode) {
                 localStorage.setItem('theme', 'dark');
                 document.documentElement.setAttribute('data-theme', 'dark');
-                
-                // Dispatch custom event to notify theme toggle
                 window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: 'dark' } }));
             }
         };
-    }, []); // Only run on mount
+    }, []);
 
+    // Fetch blog content from GitHub
     useEffect(() => {
-        fetchBlogContent();
+        const loadContent = async () => {
+            setLoading(true);
+            setError(null);
+
+            const blogData = getBlogById(blogId);
+            if (!blogData) {
+                setLoading(false);
+                return;
+            }
+            setBlog(blogData);
+
+            try {
+                // Load pages list from SUMMARY.md
+                const blogPages = await fetchBlogPages(blogData);
+                setPages(blogPages);
+
+                if (pageSlug) {
+                    // Fetch specific page
+                    const pageContent = await fetchBlogPage(blogData, pageSlug);
+                    setContent(pageContent);
+                    setCurrentPageSlug(pageSlug);
+                } else {
+                    // Fetch main README.md
+                    const result = await fetchBlogContent(blogData);
+                    setContent(result.content);
+                    setCover(result.cover);
+                    setCurrentPageSlug(null);
+                }
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadContent();
     }, [blogId, pageSlug]);
 
     // Apply flex layout to divs with multiple figures
     useEffect(() => {
-        if (!currentPage?.content) return;
-        
-        // Small delay to ensure DOM is fully rendered
+        if (!content) return;
+
         const timer = setTimeout(() => {
-            // Find all divs and check if they have multiple figures
             const allDivs = document.querySelectorAll('.blog-content-body > div');
             allDivs.forEach(div => {
                 const figures = div.querySelectorAll(':scope > figure');
@@ -160,8 +149,7 @@ export const BlogPost = () => {
                     div.classList.add('multiple-figures');
                 }
             });
-            
-            // Also check for divs with align="left" attribute (GitBook inline images)
+
             const leftAlignedDivs = document.querySelectorAll('.blog-content-body div[align="left"]');
             leftAlignedDivs.forEach(div => {
                 const figures = div.querySelectorAll('figure');
@@ -169,148 +157,72 @@ export const BlogPost = () => {
                     div.classList.add('multiple-figures');
                 }
             });
-        }, 200); // Increased delay for better reliability
+        }, 200);
 
         return () => clearTimeout(timer);
-    }, [currentPage, blogId, pageSlug]); // Added blogId and pageSlug to dependencies
-
-    const fetchBlogContent = async () => {
-        try {
-            let response;
-            
-            if (pageSlug) {
-                // Fetch specific page within a blog
-                response = await fetch(`${API_BASE_URL}/blogs/${blogId}/page/${pageSlug}`, {
-                    headers: { 'X-API-Key': API_KEY }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    setBlog(data.blog);
-                    setCurrentPage(data.page);
-                    setPageNavigation(data.navigation);
-                    
-                    // Fetch all pages for TOC if multipage
-                    if (data.blog.is_multipage) {
-                        const pagesResponse = await fetch(`${API_BASE_URL}/blogs/${blogId}/pages`, {
-                            headers: { 'X-API-Key': API_KEY }
-                        });
-                        if (pagesResponse.ok) {
-                            const pagesData = await pagesResponse.json();
-                            setPages(pagesData.pages || []);
-                        }
-                    }
-                }
-            } else {
-                // No pageSlug - redirect to first page for multi-page blogs
-                response = await fetch(`${API_BASE_URL}/blogs/${blogId}/content`, {
-                    headers: { 'X-API-Key': API_KEY }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    
-                    // If multi-page blog, redirect to first page
-                    if (data.is_multipage && data.pages && data.pages.length > 0) {
-                        const firstPage = data.pages[0];
-                        navigate(`/blog/${blogId}/page/${firstPage.slug}`, { replace: true });
-                        return;
-                    }
-                    
-                    // Single-page blog: show full content
-                    setBlog(data);
-                    setCurrentPage({
-                        title: data.title,
-                        content: data.content,
-                        page_order: 0,
-                        slug: 'main'
-                    });
-                    setPages([]);
-                    setPageNavigation({ previous: null, next: null });
-                }
-            }
-            
-            if (!response.ok) {
-                if (response.status === 404) {
-                    setBlog(null);
-                    return;
-                }
-                throw new Error('Failed to fetch blog');
-            }
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [content, blogId, pageSlug]);
 
     // Process content - wrap standalone images in figure tags and convert GitBook embeds
     const processContent = (content) => {
         if (!content) return '';
-        
-        let processedContent = content;
-        
+
+        // Remove YAML frontmatter (--- ... ---) that GitBook includes at top of README.md
+        // This avoids rendering the raw frontmatter (title/description/cover/etc.) in the page
+        let processedContent = String(content).replace(/^\s*---[\s\S]*?---\s*/i, '');
+
+        // Also remove any stray frontmatter-like single-line metadata that may remain
+        // e.g. lines like `description: ...` or `tags: ...` left after conversion
+        processedContent = processedContent.replace(/^\s*(description|tags?):.*$/gim, '');
+
+        // Remove leading single-line metadata lines like `key: value` occurring at the top
+        // This handles cases where YAML frontmatter was not removed completely and left metadata lines
+        processedContent = processedContent.replace(/^(\s*(?:[A-Za-z0-9_-]+):[^\n]*\n)+/, '');
+
         // Convert GitBook YouTube embeds to iframe embeds
         // Pattern: {% embed url="https://youtu.be/VIDEO_ID" %}
         // or {% embed url="https://www.youtube.com/watch?v=VIDEO_ID" %}
         processedContent = processedContent.replace(
             /\{%\s*embed\s+url="([^"]+)"\s*%\}/gi,
             (match, url) => {
-                // Extract YouTube video ID from various URL formats
                 let videoId = null;
-                
-                // Format 1: https://youtu.be/VIDEO_ID
+
                 const youtuBeMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
-                if (youtuBeMatch) {
-                    videoId = youtuBeMatch[1];
-                }
-                
-                // Format 2: https://www.youtube.com/watch?v=VIDEO_ID
+                if (youtuBeMatch) videoId = youtuBeMatch[1];
+
                 const youtubeMatch = url.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/);
-                if (youtubeMatch) {
-                    videoId = youtubeMatch[1];
-                }
-                
-                // Format 3: https://www.youtube.com/embed/VIDEO_ID
+                if (youtubeMatch) videoId = youtubeMatch[1];
+
                 const embedMatch = url.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/);
-                if (embedMatch) {
-                    videoId = embedMatch[1];
-                }
-                
+                if (embedMatch) videoId = embedMatch[1];
+
                 if (videoId) {
-                    // Return responsive YouTube embed
                     return `
 <div class="video-embed-container">
-  <iframe 
-    src="https://www.youtube.com/embed/${videoId}" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+  <iframe
+    src="https://www.youtube.com/embed/${videoId}"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
     allowfullscreen
   ></iframe>
 </div>`;
                 }
-                
-                // For other embeds (not YouTube), create a simple link
+
                 return `<div class="embed-fallback"><a href="${url}" target="_blank" rel="noopener noreferrer">View embedded content: ${url}</a></div>`;
             }
         );
-        
+
         // Wrap standalone img tags (not already in figures) with figure and figcaption
         // Only wrap if img is NOT preceded by <figure> tag
         processedContent = processedContent.replace(
             /(?<!<figure[^>]*>[\s\S]*?)<img\s+([^>]*?)alt="([^"]*)"([^>]*?)>/gi,
-            (match, before, altText, after) => {
-                // Check if this match is already inside a figure
-                // Simple heuristic: if we don't see </figure> before this in a small window, it's standalone
-                const beforeContext = content.substring(Math.max(0, content.indexOf(match) - 100), content.indexOf(match));
+            (match, before, altText, after, offset, str) => {
+                // Use the provided offset and string to locate context without relying on external vars
+                const beforeContext = str.substring(Math.max(0, offset - 100), offset);
                 const isInFigure = beforeContext.includes('<figure') && !beforeContext.includes('</figure>');
-                
-                if (isInFigure) {
-                    return match; // Keep as is
-                }
-                
-                // Wrap standalone image
+
+                if (isInFigure) return match;
+
                 return `<figure><img ${before}alt="${altText}"${after}><figcaption>${altText}</figcaption></figure>`;
             }
         );
@@ -323,9 +235,6 @@ export const BlogPost = () => {
 
     // Custom components for ReactMarkdown
     const markdownComponents = {
-        // Remove custom img/svg handlers - let GitBook HTML pass through as-is
-        // The CSS will handle all styling for figures, images, and figcaptions
-        
         code: ({inline, className, children, ...props}) => {
             return inline ? (
                 <code className="inline-code" {...props}>{children}</code>
@@ -341,7 +250,6 @@ export const BlogPost = () => {
             </blockquote>
         ),
         h1: ({children, ...props}) => {
-            // Skip rendering H1 if it matches the blog title (avoid duplicate)
             const titleText = children?.toString?.() || '';
             const blogTitle = blog?.title || '';
             if (titleText === blogTitle || blogTitle.includes(titleText)) {
@@ -353,50 +261,36 @@ export const BlogPost = () => {
         h3: ({children, ...props}) => <h3 className="blog-h3" {...props}>{children}</h3>,
         h4: ({children, ...props}) => <h4 className="blog-h4" {...props}>{children}</h4>,
         p: ({children, ...props}) => <p className="blog-paragraph" {...props}>{children}</p>,
-        a: ({href, children, ...props}) => {
-            // Handle internal blog navigation links specially
-            if (href && href.startsWith('/blog/')) {
-                const isNext = children?.toString?.().includes('Next:');
-                const isPrev = children?.toString?.().includes('Previous:');
-                
-                if (isNext || isPrev) {
-                    return (
-                        <div className={`blog-nav-card ${isNext ? 'next' : 'prev'}`}>
-                            <div className="blog-nav-direction">
-                                {isPrev ? '← Previous' : 'Next →'}
-                            </div>
-                            <a 
-                                href={href}
-                                className="blog-nav-link"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    navigate(href);
-                                }}
-                                {...props}
-                            >
-                                <div className="blog-nav-title">
-                                    {children?.toString?.().replace(/^(Next:|Previous:)\s*/, '')}
-                                </div>
-                            </a>
-                        </div>
-                    );
-                }
-            }
-            
-            return (
-                <a 
-                    href={href} 
-                    target={href?.startsWith('http') ? '_blank' : undefined}
-                    rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-                    className="blog-link"
-                    {...props}
-                >
-                    {children}
-                </a>
-            );
+        a: ({href, children, ...props}) => (
+            <a
+                href={href}
+                target={href?.startsWith('http') ? '_blank' : undefined}
+                rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+                className="blog-link"
+                {...props}
+            >
+                {children}
+            </a>
+        )
+    };
+
+    // Compute page navigation
+    const currentPageIndex = pages.findIndex(p => p.filename === currentPageSlug);
+    const pageNavigation = {
+        previous: currentPageIndex > 0 ? pages[currentPageIndex - 1] : null,
+        next: currentPageIndex < pages.length - 1 ? pages[currentPageIndex + 1] : null,
+    };
+    // If on main page (README) and there are pages, "next" is the first page
+    if (!currentPageSlug && pages.length > 0) {
+        pageNavigation.next = pages[0];
+    }
+
+    const navigateToPage = (filename) => {
+        if (!filename) {
+            navigate(`/blog/${blogId}`);
+        } else {
+            navigate(`/blog/${blogId}/page/${filename}`);
         }
-        // Let divs, figures, and figcaptions pass through as-is
-        // The CSS handles all GitBook HTML styling
     };
 
     if (loading) {
@@ -422,7 +316,6 @@ export const BlogPost = () => {
                 <div className="blog-error">
                     <h1>Error loading blog post</h1>
                     <p>{error}</p>
-                    <button onClick={fetchBlogContent} className="retry-button">Retry</button>
                     <button onClick={() => navigate('/blog')} className="back-button">
                         ← Back to Blog
                     </button>
@@ -430,8 +323,8 @@ export const BlogPost = () => {
             </Container>
         );
     }
-    
-    if (!blog || !currentPage) {
+
+    if (!blog) {
         return (
             <Container className="blog-post-container">
                 <div className="blog-not-found">
@@ -444,16 +337,6 @@ export const BlogPost = () => {
         );
     }
 
-    const navigateToPage = (pageSlug) => {
-        if (pageSlug === 'main') {
-            // Single-page blog - stay on main route
-            navigate(`/blog/${blogId}`);
-        } else {
-            // Multi-page blog - navigate to specific page
-            navigate(`/blog/${blogId}/page/${pageSlug}`);
-        }
-    };
-
     return (
         <HelmetProvider>
             <Helmet>
@@ -461,7 +344,7 @@ export const BlogPost = () => {
                 <title>{blog.title} | {meta.title}</title>
                 <meta name="description" content={blog.excerpt} />
             </Helmet>
-            
+
             {/* Light Mode Preference Overlay */}
             {showLightModeOverlay && (
                 <div className="light-mode-overlay">
@@ -472,13 +355,12 @@ export const BlogPost = () => {
                     </div>
                 </div>
             )}
-            
+
             <div className="blog-layout-wrapper">
                 {/* Sidebar - Table of Contents (Desktop) */}
-                {blog.is_multipage && pages.length > 1 && (
+                {pages.length > 0 && (
                     <>
-                        {/* Sidebar Toggle Button */}
-                        <button 
+                        <button
                             className={`sidebar-toggle ${sidebarOpen ? 'open' : ''}`}
                             onClick={() => setSidebarOpen(!sidebarOpen)}
                             aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
@@ -486,16 +368,22 @@ export const BlogPost = () => {
                         >
                             <span className="chevron-arrow"></span>
                         </button>
-                        
+
                         <aside className={`blog-sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
                             <div className="blog-sidebar-content">
                                 <div className="blog-toc-sidebar">
                                     <nav className="toc-nav">
+                                        <button
+                                            onClick={() => navigateToPage(null)}
+                                            className={`toc-item ${!currentPageSlug ? 'active' : ''}`}
+                                        >
+                                            <span className="toc-text">Introduction</span>
+                                        </button>
                                         {pages.map((page) => (
                                             <button
-                                                key={page.slug}
-                                                onClick={() => navigateToPage(page.slug)}
-                                                className={`toc-item ${currentPage?.slug === page.slug ? 'active' : ''}`}
+                                                key={page.filename}
+                                                onClick={() => navigateToPage(page.filename)}
+                                                className={`toc-item ${currentPageSlug === page.filename ? 'active' : ''}`}
                                             >
                                                 <span className="toc-text">{page.title}</span>
                                             </button>
@@ -506,51 +394,42 @@ export const BlogPost = () => {
                         </aside>
                     </>
                 )}
-                
+
                 {/* Main Content */}
-                <main className={`blog-main-content ${blog.is_multipage && pages.length > 1 ? (sidebarOpen ? 'with-sidebar' : 'with-sidebar-closed') : ''}`}>
+                <main className={`blog-main-content ${pages.length > 0 ? (sidebarOpen ? 'with-sidebar' : 'with-sidebar-closed') : ''}`}>
                     <Container className="blog-post-container">
                         <article className="blog-post">
                             <div className="blog-post-header">
-                                {/* Desktop and mobile back button */}
                                 <button onClick={() => navigate('/blog')} className="back-button">
                                     ← Back to Blog
                                 </button>
-                                
+
                                 <div className="blog-post-meta">
                                     <span className="blog-post-date">{blog.date}</span>
                                     <span className="blog-post-read-time">{blog.readTime}</span>
                                 </div>
-                                
-                                <h1 className="blog-post-title">{currentPage?.title || blog.title}</h1>
-                                
-                                {blog.excerpt && !blog.is_multipage && (
+
+                                {cover && (
+                                    <div className="blog-post-image">
+                                        <img src={cover} alt={blog.title} />
+                                    </div>
+                                )}
+
+                                <h1 className="blog-post-title">{blog.title}</h1>
+
+                                {/* Always show the excerpt/description below the title (small grey subtitle) */}
+                                {blog.excerpt && (
                                     <p className="blog-post-description">{blog.excerpt}</p>
                                 )}
-                                
-                                <div className="blog-post-tags">
-                                    {(blog.tags || []).map(tag => (
-                                        <span key={tag} className="blog-post-tag">{tag}</span>
-                                    ))}
-                                </div>
+
+                                {/* Tags are displayed only on the listing/thumbnail cards — not on the full post */}
+                                {/* (Intentionally omitted here) */}
                             </div>
-                            
-                            {blog.image && !blog.is_multipage && (
-                                <div className="blog-post-image">
-                                    <img 
-                                        src={blog.image.startsWith('/uploads/') 
-                                            ? `${API_BASE_URL.replace('/api', '')}${blog.image}`
-                                            : blog.image
-                                        } 
-                                        alt={blog.title} 
-                                    />
-                                </div>
-                            )}
-                            
+
                             <div className="blog-post-content">
                                 <div className="blog-content-body">
                                     <ReactMarkdown
-                                        children={processContent(currentPage?.content || blog.content || blog.excerpt)}
+                                        children={processContent(content)}
                                         remarkPlugins={[remarkGfm]}
                                         rehypePlugins={[
                                             rehypeRaw,
@@ -560,36 +439,41 @@ export const BlogPost = () => {
                                     />
                                 </div>
                             </div>
-                            
-                            {/* Mobile TOC - Show below content on mobile/tablet */}
-                            {blog.is_multipage && pages.length > 1 && (
+
+                            {/* Mobile TOC */}
+                            {pages.length > 0 && (
                                 <div className="blog-pages-toc">
                                     <h3>Table of Contents</h3>
                                     <ul>
+                                        <li className={!currentPageSlug ? 'active' : ''}>
+                                            <button onClick={() => navigateToPage(null)} className="toc-link">
+                                                1. Introduction
+                                            </button>
+                                        </li>
                                         {pages.map((page, index) => (
-                                            <li 
-                                                key={page.slug}
-                                                className={currentPage?.slug === page.slug ? 'active' : ''}
+                                            <li
+                                                key={page.filename}
+                                                className={currentPageSlug === page.filename ? 'active' : ''}
                                             >
                                                 <button
-                                                    onClick={() => navigateToPage(page.slug)}
+                                                    onClick={() => navigateToPage(page.filename)}
                                                     className="toc-link"
                                                 >
-                                                    {index + 1}. {page.title}
+                                                    {index + 2}. {page.title}
                                                 </button>
                                             </li>
                                         ))}
                                     </ul>
                                 </div>
                             )}
-                            
-                            {/* Page navigation: Previous/Next page within the same blog */}
+
+                            {/* Page navigation */}
                             {(pageNavigation.previous || pageNavigation.next) && (
                                 <div className="blog-post-navigation">
                                     {pageNavigation.previous && (
-                                        <div 
+                                        <div
                                             className="blog-nav-button prev"
-                                            onClick={() => navigateToPage(pageNavigation.previous.slug)}
+                                            onClick={() => navigateToPage(pageNavigation.previous.filename)}
                                         >
                                             <div className="nav-arrow">←</div>
                                             <div className="nav-content">
@@ -599,9 +483,9 @@ export const BlogPost = () => {
                                         </div>
                                     )}
                                     {pageNavigation.next && (
-                                        <div 
+                                        <div
                                             className="blog-nav-button next"
-                                            onClick={() => navigateToPage(pageNavigation.next.slug)}
+                                            onClick={() => navigateToPage(pageNavigation.next.filename)}
                                         >
                                             <div className="nav-content">
                                                 <span className="nav-label">Next</span>
@@ -612,7 +496,7 @@ export const BlogPost = () => {
                                     )}
                                 </div>
                             )}
-                            
+
                         </article>
                     </Container>
                 </main>
