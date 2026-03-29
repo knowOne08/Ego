@@ -2,13 +2,7 @@ import React from "react";
 import "./style.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Container, Row, Col } from "react-bootstrap";
-import {
-  dataabout,
-  meta,
-  worktimeline,
-  skills,
-  services,
-} from "../../content_option";
+import { meta } from "../../content_option";
 
 export const About = () => {
   return (
@@ -26,14 +20,8 @@ export const About = () => {
           </Col>
         </Row>
         <Row className="sec_sp">
-          <Col lg="5">
-            <h3 className="color_sec pt-2 pb-1">{dataabout.title}</h3>
-          </Col>
-          <Col lg="7" className="d-flex align-items-center">
-            <div>
-              <p>{dataabout.aboutme}</p>
-              <div className="about" >{dataabout.quatrain}</div>
-            </div>
+          <Col lg="12" className="d-flex align-items-center justify-content-center">
+            <p style={{ opacity: 0.5, fontStyle: "italic" }}>Under construction...</p>
           </Col>
         </Row>
         {/* <Row className=" sec_sp">
